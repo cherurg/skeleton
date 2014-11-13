@@ -1,0 +1,22 @@
+{
+  "name": "skeleton",
+  "version": "1.0.0",
+  "authors": [
+    "Alexey Karpov <karpovad@yandex.ru>"
+  ],
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3": "~3.4.13"
+  }
+}
