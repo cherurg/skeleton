@@ -1,5 +1,6 @@
 var dest = "./dist";
 var src = './src';
+var tests = './tests';
 
 module.exports = {
   browserSync: {
@@ -26,6 +27,9 @@ module.exports = {
     src: src + "/htdocs/**",
     dest: dest
   },
+  coffee: {
+    src: src + "/coffee/**"
+  },
   browserify: {
     // Enable source maps
     debug: true,
@@ -38,5 +42,8 @@ module.exports = {
       dest: dest + '/js',
       outputName: 'plot.js'
     }]
+  },
+  tests: {
+    source: tests + "/*-test.*"
   }
 };
