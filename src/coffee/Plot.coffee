@@ -66,15 +66,16 @@ class Plot
     .attr 'height', @height
     .attr 'viewBox', "0 0 " + @width + " " + @height
 
-  draw: ->
     #эти две штуки помогут перевести математически заданные функции в рисунок
     @x = d3.scale.linear()
-      .domain [@pure.left, @pure.right]
-      .range [0, @width]
+    .domain [@pure.left, @pure.right]
+    .range [0, @width]
     @y = d3.scale.linear()
-      .domain [@pure.bottom, @pure.top]
-      .range _([0, @height]).reverse().value()
+    .domain [@pure.bottom, @pure.top]
+    .range _([0, @height]).reverse().value()
 
+
+  draw: ->
     ######
     # прорисовка вертикальных линий
     xTicks = @x.ticks @ticks
@@ -132,11 +133,11 @@ class Plot
 
     gy.exit().remove()
 
+    @svg.call d3.behavior.zoom().x(@x).y(@y).on("zoom", @draw.bind @)
 
     console.log @ + " is drawn"
 
   getGraph: -> @graph
 
-###
-plot = new Plot 'plot', new PlotPure()
+###plot = new Plot 'plot', new PlotPure()
 plot.draw()###
