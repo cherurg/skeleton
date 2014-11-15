@@ -3,6 +3,7 @@ PlotPure = require './PlotPure.coffee'
 Plot = require './Plot.coffee'
 Point = require './Point.coffee'
 PointPure = require './PointPure.coffee'
+Wrap = require './Wrap.coffee'
 
 class Plotter
   constructor: (elementID, options = {}) ->
@@ -17,8 +18,18 @@ class Plotter
     .value()
     @plot = new Plot @id, new PlotPure(), plotOptions
 
+    @points = new Wrap()
+
   draw: ->
     @plot.draw()
 
+  addPoint: (x, y, options) ->
+    point = new Point new PointPure(), @plot.graph, options
+    @points.addElement point
+    return point
+
+
 module.exports = Plotter
+
+# делаем Plotter видимым глобально
 window.Plotter = Plotter
