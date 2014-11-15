@@ -29,4 +29,8 @@ class Wrap
     # удаляем смертника
     _.remove @arr, (o) -> o is dead
 
+  each: (func) ->
+    arr = _.map @arr, (o) -> o.el
+    _.each arr, func
+
 module.exports = Wrap
