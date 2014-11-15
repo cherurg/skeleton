@@ -1,5 +1,6 @@
 d3 = require '../libs/d3/d3.js'
 _ = require 'lodash'
+ee = require 'event-emitter'
 
 class Plot
   defaults:
@@ -77,6 +78,7 @@ class Plot
     .domain [@pure.bottom, @pure.top]
     .range _([0, @height]).reverse().value()
 
+    @emitter = ee @
 
   draw: ->
     ######
@@ -142,7 +144,8 @@ class Plot
 
     gy.exit().remove()
 
-    @svg.call d3.behavior.zoom().x(@x).y(@y).on("zoom", @draw.bind @)
+    self = @
+    @svg.call d3.behavior.zoom().x(@x).y(@y).on("zoom", () -> self.emitter.emit 'draw')
 
     console.log @ + " is drawn"
 

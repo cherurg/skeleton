@@ -17,6 +17,8 @@ class Plotter
     .pick _.keys(Plot.defaults)
     .value()
     @plot = new Plot @id, new PlotPure(), plotOptions
+    self = @
+    @plot.emitter.on 'draw', () -> self.draw()
 
     @points = new Wrap()
 
