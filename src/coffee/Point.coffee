@@ -32,7 +32,18 @@ class Point
     .attr 'r', @size
     .attr 'fill', @color
 
-  setSize: (size) -> @size = @sizeScale size
+  setSize: (size) ->
+    if _.isNumber size
+      @size = size
+    else if _.isString size
+      @size = @sizeScale size
+
+  setColor: (color) ->
+    if _.isNumber color
+      @color = colors color
+    else if _.isString color and color[0] is "#"
+      @color = color
+
   setX: (x) -> @pure.x = x
   setY: (y) -> @pure.y = y
   getX: () ->  @pure.x
