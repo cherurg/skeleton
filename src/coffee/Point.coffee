@@ -5,7 +5,7 @@ colors = require './Colors.coffee'
 class Point
   constructor: (pointPure, graph, linearX, linearY, options) ->
     @pure = pointPure
-    _.extend(@, @defaults, options)
+    _.extend(@, Point.defaults, options)
 
     # используется в setSize
     @sizeScale = d3
@@ -38,9 +38,9 @@ class Point
   getX: () ->  @pure.x
   getY: () ->  @pure.y
 
-  defaults:
-    movable: false
-    color: colors(6) #d62728 - красный
-    size: 3
+Point.defaults =
+  movable: false
+  color: colors(6) #d62728 - красный
+  size: 3
 
 module.exports = Point

@@ -3,19 +3,6 @@ _ = require 'lodash'
 ee = require 'event-emitter'
 
 class Plot
-  defaults:
-    width: 800
-    height: 600
-    stroke: '#000000'
-    vertical: 20
-    horizontal: 30
-    ticks: 10
-    transformX: (d) -> "translate(" + @x(d) + ",0)"
-    transformY: (d) -> "translate(0," + @y(d) + ")"
-    lineWidth: (d) -> if d then "1" else "2"
-    lineColor: (d) -> if d then "#ccc" else "#666"
-    tickNull: (d) -> if Math.abs(d) < 1e-10 then 0 else d
-
   constructor: (elementID, plotPure, options = {}) ->
     # если elementID не определен, то бросаем исключение.
     # Можно ли это сделать более коротким способом?
@@ -47,7 +34,7 @@ class Plot
 
     # присвоить классу все свойства из defaults. Если в options будет найдено
     # свойство с уже существующим именем, то оно будет перезаписано
-    _.extend @, @defaults, options
+    _.extend @, Plot.defaults, options
 
     @el.html ''
     @svg = @el
@@ -150,5 +137,18 @@ class Plot
     console.log @ + " is drawn"
 
   getGraph: -> @graph
+
+Plot.defaults =
+  width: 800
+  height: 600
+  stroke: '#000000'
+  vertical: 20
+  horizontal: 30
+  ticks: 10
+  transformX: (d) -> "translate(" + @x(d) + ",0)"
+  transformY: (d) -> "translate(0," + @y(d) + ")"
+  lineWidth: (d) -> if d then "1" else "2"
+  lineColor: (d) -> if d then "#ccc" else "#666"
+  tickNull: (d) -> if Math.abs(d) < 1e-10 then 0 else d
 
 module.exports = Plot

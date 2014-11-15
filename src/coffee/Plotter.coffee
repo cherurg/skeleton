@@ -16,7 +16,11 @@ class Plotter
     plotOptions = _ options
     .pick _.keys(Plot.defaults)
     .value()
-    @plot = new Plot @id, new PlotPure(), plotOptions
+    plotPureOptions = _ options
+    .pick _.keys(PlotPure.defaults)
+    .value()
+
+    @plot = new Plot @id, new PlotPure(plotPureOptions), plotOptions
     self = @
     @plot.emitter.on 'draw', () -> self.draw()
 
