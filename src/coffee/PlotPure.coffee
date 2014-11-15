@@ -4,7 +4,6 @@ class PlotPure
   constructor: (options) ->
     _.extend @, @defaults, options
 
-
   defaults:
     left: -10
     right: 10

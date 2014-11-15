@@ -38,7 +38,7 @@ module.exports = {
     // A separate bundle will be generated for each
     // bundle config in the list below
     bundleConfigs: [{
-      entries: src + '/coffee/Plot.coffee',
+      entries: src + '/coffee/Plotter.coffee',
       dest: dest + '/js',
       outputName: 'plot.js'
     }]

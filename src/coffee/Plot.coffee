@@ -1,6 +1,5 @@
 d3 = require '../libs/d3/d3.js'
 _ = require 'lodash'
-PlotPure = require './PlotPure.coffee'
 
 class Plot
   defaults:
@@ -19,10 +18,11 @@ class Plot
   constructor: (elementID, plotPure, options = {}) ->
     # если elementID не определен, то бросаем исключение.
     # Можно ли это сделать более коротким способом?
-    if not elementID?
+    unless elementID?
       throw  @constructor.name + ": Отсутствует ID элемента для рисования"
 
-    # Проверяем, является ли первый символ решеткой (символ id в html в нотации селекторов)
+    # Проверяем, является ли первый символ решеткой (символ id в html в
+    # нотации селекторов)
     # если нет, то добавляем решетку.
     @id = if elementID[0] is "#" then elementID else "#" + elementID
 
@@ -30,6 +30,7 @@ class Plot
     @el = d3.select @id
     if do @el.empty
       throw @constructor.name + ": Не найден элемент с указанным ID -- " + @id
+    # запрет выделения текста. Это чтобы никто не выделял цифры на осях.
     @el
     .style 'cursor', 'default'
     .style '-moz-user-select', '-moz-none'
@@ -39,7 +40,7 @@ class Plot
     .style 'user-select', 'none'
 
     # plot должен быть класса PlotPure.
-    if not plotPure? or plotPure?.constructor?.name isnt "PlotPure"
+    unless plotPure? and plotPure?.constructor?.name is "PlotPure"
       throw @constructor.name + ": Неверный аргумент plot -- " + plotPure
     @pure = plotPure
 
@@ -50,13 +51,15 @@ class Plot
     @el.html ''
     @svg = @el
     .append 'svg'
-    .attr 'width', @width + @horizontal   #здесь еще нужно добавить пикселей для оси
+    .attr 'width', @width + @horizontal   #здесь еще нужно добавить
+    # пикселей для оси
     .attr 'height', @height + @vertical   #здесь тоже
     @svg
     .append 'rect'
     .attr 'width', @width
     .attr 'height', @height
-    .attr 'stroke-width', 1 #по какой-то причине границы снизу и справа шире, чем слева и сверху
+    .attr 'stroke-width', 1 #по какой-то причине границы снизу и справа шире,
+    # чем слева и сверху
     .attr 'stroke', @stroke
     .attr 'fill-opacity', 0
 
@@ -76,6 +79,12 @@ class Plot
 
 
   draw: ->
+    ######
+    # берем домены по x и y и обновляем по ним свойства.
+    # пригодится для сериализации или передачи данных.
+    [@pure.left, @pure.right] = do @x.domain
+    [@pure.bottom, @pure.top] = do @y.domain
+
     ######
     # прорисовка вертикальных линий
     xTicks = @x.ticks @ticks
@@ -139,5 +148,4 @@ class Plot
 
   getGraph: -> @graph
 
-###plot = new Plot 'plot', new PlotPure()
-plot.draw()###
+module.exports = Plot

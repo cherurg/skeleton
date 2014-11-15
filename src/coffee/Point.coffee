@@ -9,3 +9,5 @@ class Point
   draw: ->
 
   defaults: {}
+
+module.exports = Point
