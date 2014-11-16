@@ -18,17 +18,13 @@ class Point
     @setSize @size
     @setColor @color
 
-    drag = d3.behavior
-    .drag()
-    .on 'drag', Point.behavior(@behaviorType).bind @
-
     self = @
     @el = graph
     .append 'circle'
     .classed 'point', true
     .on 'mousedown', ->
       d3.event.stopPropagation() if self.movable
-    .call drag
+    .call Point.behavior.call(@, @behaviorType)
 
     @draw linearX, linearY
 
@@ -73,17 +69,22 @@ Point.freeBehavior = ->
   @pure.x = @linearX.invert @el.attr('cx')
   @pure.y = @linearY.invert @el.attr('cy')
 
-
 Point._behaviorTemplate = (behavior) ->
+  self = @
   return ->
-    return unless @.movable
-    behavior.call @
+    return unless self.movable
+    behavior.call self
 
 Point.behavior = (type) ->
   return unless _.isString type
 
+  drag = d3.behavior.drag()
+
   if type is 'free'
-    return Point._behaviorTemplate.call @, Point.freeBehavior
+    drag
+    .on 'drag', Point._behaviorTemplate.call(@, Point.freeBehavior.bind @)
+
+  return drag
 
 Point.defaults =
   movable: false
