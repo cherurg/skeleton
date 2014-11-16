@@ -18,13 +18,20 @@ class Point
     @setSize @size
     @setColor @color
 
+
+    # сделать у @ свойство drag.
+    Point.behavior.call @, @behaviorType
+
     self = @
     @el = graph
     .append 'circle'
     .classed 'point', true
     .on 'mousedown', ->
+      # когда нажимаем на точку со свойством movable, то нам нужно позаботиться
+      # о том, чтобы с движением точки не обрабатывалось еще и событие zoom
+      # графика. stopPropagation нам в этом помогает.
       d3.event.stopPropagation() if self.movable
-    .call Point.behavior.call(@, @behaviorType)
+    .call @drag
 
     @draw linearX, linearY
 
@@ -78,13 +85,15 @@ Point._behaviorTemplate = (behavior) ->
 Point.behavior = (type) ->
   return unless _.isString type
 
-  drag = d3.behavior.drag()
+  @drag ?= d3.behavior.drag()
 
+  # в случае, если в рантайме нужно будет поменять поведение, то достаточно
+  # будет изменить функцию, вызываемую .on 'drag'
   if type is 'free'
-    drag
+    @drag
     .on 'drag', Point._behaviorTemplate.call(@, Point.freeBehavior.bind @)
 
-  return drag
+  return @drag
 
 Point.defaults =
   movable: false
