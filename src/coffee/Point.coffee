@@ -14,9 +14,21 @@ class Point
     .domain ["large", "medium", "small", "tiny"]
     .range [5, 3, 2, 1.5]
 
+    # на случай, если в options размер был указан словом, а цвет - цифрой
+    @setSize @size
+    @setColor @color
+
+    drag = d3.behavior
+    .drag()
+    .on 'drag', Point.behavior(@behaviorType).bind @
+
+    self = @
     @el = graph
     .append 'circle'
     .classed 'point', true
+    .on 'mousedown', ->
+      d3.event.stopPropagation() if self.movable
+    .call drag
 
     @draw linearX, linearY
 
@@ -49,9 +61,34 @@ class Point
   getX: () ->  @pure.x
   getY: () ->  @pure.y
 
+
+######
+# поведения и их описания
+
+Point.freeBehavior = ->
+  @el
+  .attr 'cx', d3.event.x
+  .attr 'cy', d3.event.y
+
+  @pure.x = @linearX.invert @el.attr('cx')
+  @pure.y = @linearY.invert @el.attr('cy')
+
+
+Point._behaviorTemplate = (behavior) ->
+  return ->
+    return unless @.movable
+    behavior.call @
+
+Point.behavior = (type) ->
+  return unless _.isString type
+
+  if type is 'free'
+    return Point._behaviorTemplate.call @, Point.freeBehavior
+
 Point.defaults =
   movable: false
   color: colors(6) #d62728 - красный
   size: 3
+  behaviorType: 'free'
 
 module.exports = Point
