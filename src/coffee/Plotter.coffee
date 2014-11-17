@@ -3,6 +3,8 @@ PlotPure = require './PlotPure.coffee'
 Plot = require './Plot.coffee'
 Point = require './Point.coffee'
 PointPure = require './PointPure.coffee'
+Func = require './Func.coffee'
+FuncPure = require './FuncPure.coffee'
 Wrap = require './Wrap.coffee'
 
 class Plotter
@@ -25,18 +27,30 @@ class Plotter
     @plot.emitter.on 'draw', () -> self.draw()
 
     @points = new Wrap()
+    @functions = new Wrap()
 
   draw: ->
     @plot.draw()
 
     [linearX, linearY] = [@plot.x, @plot.y]
     @points.each (point) -> point.draw linearX, linearY
+    @functions.each (func) -> func.draw linearX, linearY
 
   addPoint: (x, y, options) ->
     point = new Point new PointPure(x, y), @plot.graph, @plot.x, @plot.y, options
     @points.addElement point
     return point
 
+  removePoint: (point) ->
+    @points.removePoint point
+
+  addFunc: (func, options) ->
+    obj = new Func new FuncPure(func), @plot.graph, @plot.x, @plot.y, options
+    @functions.addElement obj
+    return obj
+
+  removeFunc: (func) ->
+    @functions.removeElement func
 
 module.exports = Plotter
 
