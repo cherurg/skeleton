@@ -29,16 +29,22 @@ class Func
   # Кроме того, можно модифицировать массив точек, не
   # создавая его заново. Смотреть, какие точки остались в
   # окне, а какие вышли за его пределы
+  # последнее замечание относится к способу оптимизации.
   getPath: ->
     points = []
     domain = @linearX.domain()
+    left = @getLeft()
+    right = @getRight()
     step = (domain[1] - domain[0])/@accuracy
-    x = @getLeft()
+    x = (left // step) * step + step
 
-    while x <= @getRight()
+    points.push x: left, y: @pure.func left
+
+    while x <= right
       y = @pure.func x
       points.push x: x, y: y
       x += step
+    points.push right, @pure.func right unless x is right
 
     return @path points
 
