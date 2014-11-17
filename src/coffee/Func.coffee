@@ -12,12 +12,19 @@ class Func
     .x (d) -> self.linearX d.x
     .y (d) -> self.linearY d.y
 
-    @el = graph
-    .append 'path'
-    .classed 'function', true
-    .attr 'fill', 'none'
-    .attr 'stroke-width', @strokeWidth
-    .attr 'stroke', @color
+    @g = graph
+    .append 'g'
+
+    @el = []
+    for i in [0..@breaks.length]
+      path = @g
+      .append 'path'
+      .classed 'function', true
+      .attr 'fill', 'none'
+      .attr 'stroke-width', @strokeWidth
+      .attr 'stroke', @color
+      @el.push path
+      i
 
     @draw linearX, linearY
 
@@ -30,12 +37,21 @@ class Func
   # создавая его заново. Смотреть, какие точки остались в
   # окне, а какие вышли за его пределы
   # последнее замечание относится к способу оптимизации.
-  getPath: ->
+  getPath: (num) ->
     points = []
     domain = @linearX.domain()
-    left = @getLeft()
-    right = @getRight()
     step = (domain[1] - domain[0])/@accuracy
+
+    minValue = step/10000
+    left = if num > 0
+      @breaks[num - 1] + minValue
+    else
+      @getLeft()
+    right = if @breaks.length > 0 and num isnt @breaks.length
+      @breaks[num] - minValue
+    else
+      @getRight()
+
     x = (left // step) * step + step
 
     points.push x: left, y: @pure.func left
@@ -44,7 +60,7 @@ class Func
       y = @pure.func x
       points.push x: x, y: y
       x += step
-    points.push right, @pure.func right unless x is right
+    points.push x: right, y: @pure.func right unless x is right
 
     return @path points
 
@@ -53,7 +69,8 @@ class Func
     do @update
 
   update: ->
-    @el.attr 'd', @getPath()
+    for i, el of @el
+      el.attr 'd', @getPath parseInt i
 
   getRight: ->
     return @linearX.domain()[1] unless @pure.getRight()?
@@ -67,5 +84,6 @@ Func.defaults =
   accuracy: 300
   strokeWidth: 2
   color: colors(0)
+  breaks: []
 
 module.exports = Func
