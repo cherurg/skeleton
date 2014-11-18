@@ -33,8 +33,8 @@ class Plotter
     @plot.draw()
 
     [linearX, linearY] = [@plot.x, @plot.y]
-    @points.each (point) -> point.draw linearX, linearY
-    @functions.each (func) -> func.draw linearX, linearY
+    @points.each (point) -> point.update linearX, linearY
+    @functions.each (func) -> func.update linearX, linearY
 
   addPoint: (x, y, options) ->
     point = new Point new PointPure(x, y), @plot.graph, @plot.x, @plot.y, options

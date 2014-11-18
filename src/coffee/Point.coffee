@@ -7,6 +7,10 @@ class Point
     @pure = pointPure
     _.extend(@, Point.defaults, options)
 
+    @draw graph, linearX, linearY
+
+  # аргументы принадлежат типу d3.linear
+  draw: (graph, linearX, linearY) ->
     # используется в setSize
     @sizeScale = d3
     .scale
@@ -32,15 +36,10 @@ class Point
       # графика. stopPropagation нам в этом помогает.
       d3.event.stopPropagation() if self.movable
     .call @drag
+    @update linearX, linearY
 
-    @draw linearX, linearY
-
-  # аргументы принадлежат типу d3.linear
-  draw: (linearX, linearY) ->
+  update: (linearX, linearY) ->
     [@linearX, @linearY] = [linearX, linearY]
-    do @update
-
-  update: ->
     @el
     .attr 'cx', @linearX @pure.x
     .attr 'cy' ,@linearY @pure.y

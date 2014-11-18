@@ -7,32 +7,8 @@ class Func
     @pure = functionPure
     _.extend @, Func.defaults, _.pick(options, _.keys Func.defaults)
 
-    self = @
-    @path = d3.svg.line()
-    .x (d) -> self.linearX d.x
-    .y (d) -> self.linearY d.y
+    @draw graph, linearX, linearY
 
-    @g = graph
-    .append 'g'
-
-    @el = []
-    for i in [0..@breaks.length]
-      path = @g
-      .append 'path'
-      .classed 'function', true
-      .attr 'fill', 'none'
-      .attr 'stroke-width', @strokeWidth
-      .attr 'stroke', @color
-      @el.push path
-      i
-
-    @draw linearX, linearY
-
-  # можно поменять алгоритм обсчета пути
-  # суть в том, чтобы график рассчитывала в константных
-  # точках, которые не зависят от перемещения окна графика
-  # их можно сделать, если рассчитывать отступ не от края
-  # окна, а от нуля.
   # Кроме того, можно модифицировать массив точек, не
   # создавая его заново. Смотреть, какие точки остались в
   # окне, а какие вышли за его пределы
@@ -64,11 +40,30 @@ class Func
 
     return @path points
 
-  draw: (linearX, linearY) ->
-    [@linearX, @linearY] = [linearX, linearY]
-    do @update
+  draw: (graph, linearX, linearY) ->
+    self = @
+    @path = d3.svg.line()
+    .x (d) -> self.linearX d.x
+    .y (d) -> self.linearY d.y
 
-  update: ->
+    @g = graph
+    .append 'g'
+
+    @el = []
+    for i in [0..@breaks.length]
+      path = @g
+      .append 'path'
+      .classed 'function', true
+      .attr 'fill', 'none'
+      .attr 'stroke-width', @strokeWidth
+      .attr 'stroke', @color
+      @el.push path
+      i
+    @update linearX, linearY
+
+  update: (linearX, linearY) ->
+    [@linearX, @linearY] = [linearX, linearY]
+
     for i, el of @el
       el.attr 'd', @getPath parseInt i
 
@@ -85,5 +80,7 @@ Func.defaults =
   strokeWidth: 2
   color: colors(0)
   breaks: []
+  linearX: null
+  linearY: null
 
 module.exports = Func
