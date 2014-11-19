@@ -6,39 +6,9 @@ class Func
   constructor: (functionPure, graph, linearX, linearY, options) ->
     @pure = functionPure
     _.extend @, Func.defaults, _.pick(options, _.keys Func.defaults)
+    @breaks.sort()
 
     @draw graph, linearX, linearY
-
-  # Кроме того, можно модифицировать массив точек, не
-  # создавая его заново. Смотреть, какие точки остались в
-  # окне, а какие вышли за его пределы
-  # последнее замечание относится к способу оптимизации.
-  getPath: (num) ->
-    points = []
-    domain = @linearX.domain()
-    step = (domain[1] - domain[0])/@accuracy
-
-    minValue = step/10000
-    left = if num > 0
-      @breaks[num - 1] + minValue
-    else
-      @getLeft()
-    right = if @breaks.length > 0 and num isnt @breaks.length
-      @breaks[num] - minValue
-    else
-      @getRight()
-
-    x = (left // step) * step + step
-
-    points.push x: left, y: @pure.func left
-
-    while x <= right
-      y = @pure.func x
-      points.push x: x, y: y
-      x += step
-    points.push x: right, y: @pure.func right unless x is right
-
-    return @path points
 
   draw: (graph, linearX, linearY) ->
     self = @
@@ -64,16 +34,53 @@ class Func
   update: (linearX, linearY) ->
     [@linearX, @linearY] = [linearX, linearY]
 
+    [left, right] = [@getLeft(), @getRight()]
+    breaks = _.filter @breaks, (el) -> left < el < right
+
     for i, el of @el
-      el.attr 'd', @getPath parseInt i
+      path = @getPath parseInt(i), breaks
+      el.attr 'd', path if path?
+
+  # Кроме того, можно модифицировать массив точек, не
+  # создавая его заново. Смотреть, какие точки остались в
+  # окне, а какие вышли за его пределы
+  # последнее замечание относится к способу оптимизации.
+  getPath: (num, breaks) ->
+    return null if @getLeft() >= @getRight()
+
+    points = []
+    domain = @linearX.domain()
+    step = (domain[1] - domain[0])/@accuracy
+
+    minValue = step/10000
+    left = if num > 0
+      breaks[num - 1] + minValue
+    else
+      @getLeft()
+    right = if breaks.length > 0 and num isnt breaks.length
+      breaks[num] - minValue
+    else
+      @getRight()
+
+    x = (left // step) * step + step
+
+    points.push x: left, y: @pure.func left
+
+    while x <= right
+      y = @pure.func x
+      points.push x: x, y: y
+      x += step
+    points.push x: right, y: @pure.func right unless x is right
+
+    return @path points
 
   getRight: ->
     return @linearX.domain()[1] unless @pure.getRight()?
-    return Math.max @linearX.domain()[1], @pure.getRight()
+    return Math.min @linearX.domain()[1], @pure.getRight()
 
   getLeft: ->
     return @linearX.domain()[0] unless @pure.getLeft()?
-    return Math.min @linearX.domain()[0], @pure.getLeft()
+    return Math.max @linearX.domain()[0], @pure.getLeft()
 
 Func.defaults =
   accuracy: 300

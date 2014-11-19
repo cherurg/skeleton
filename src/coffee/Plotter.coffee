@@ -37,7 +37,7 @@ class Plotter
     @functions.each (func) -> func.update linearX, linearY
 
   addPoint: (x, y, options) ->
-    point = new Point new PointPure(x, y), @plot.graph, @plot.x, @plot.y, options
+    point = new Point new PointPure(x, y, options), @plot.graph, @plot.x, @plot.y, options
     @points.addElement point
     return point
 
@@ -45,7 +45,7 @@ class Plotter
     @points.removePoint point
 
   addFunc: (func, options) ->
-    obj = new Func new FuncPure(func), @plot.graph, @plot.x, @plot.y, options
+    obj = new Func new FuncPure(func, options), @plot.graph, @plot.x, @plot.y, options
     @functions.addElement obj
     return obj
 

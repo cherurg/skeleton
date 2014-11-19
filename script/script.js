@@ -8,6 +8,6 @@ plotter.addFunc(function (x) {
     } else {
         return 1;
     }
-}, {breaks: [0]});
+}, {breaks: [0], right: -2, left: 2});
 //point.setSize('tiny');
 //point.update();
