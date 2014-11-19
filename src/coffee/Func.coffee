@@ -6,7 +6,7 @@ class Func
   constructor: (functionPure, graph, linearX, linearY, options) ->
     @pure = functionPure
     _.extend @, Func.defaults, _.pick(options, _.keys Func.defaults)
-    @breaks.sort()
+    @breaks = _.sortBy @breaks, (el) -> return el
 
     @draw graph, linearX, linearY
 
@@ -39,14 +39,14 @@ class Func
 
     for i, el of @el
       path = @getPath parseInt(i), breaks
-      el.attr 'd', path if path?
+      el.attr 'd', path
 
   # Кроме того, можно модифицировать массив точек, не
   # создавая его заново. Смотреть, какие точки остались в
   # окне, а какие вышли за его пределы
   # последнее замечание относится к способу оптимизации.
   getPath: (num, breaks) ->
-    return null if @getLeft() >= @getRight()
+    return "" if (@getLeft() >= @getRight()) or num > breaks.length
 
     points = []
     domain = @linearX.domain()

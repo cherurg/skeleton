@@ -2,12 +2,19 @@ var plotter = new Plotter("plot");
 plotter.draw();
 var point = plotter.addPoint(1.5, 1.5, {size: 'large', movable: false});
 point.movable = true;
+
+
+arr = [-0.1, 0.1, 0.2, 0.3, 0.4, 0.5, 1];
+breaks = [-3, -2, -1, 0, 1, 2];
 plotter.addFunc(function (x) {
-    if (x < 0) {
-        return -1;
-    } else {
-        return 1;
+    for (var i = 0; i < breaks.length; i++) {
+        if (x < breaks[i]) {
+            return arr[i]
+        }
     }
-}, {breaks: [0], right: -2, left: 2});
+
+    return arr[arr.length - 1];
+
+}, {breaks: breaks, left: -4});
 //point.setSize('tiny');
 //point.update();
