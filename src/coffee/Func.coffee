@@ -49,7 +49,7 @@ class Func
   # окне, а какие вышли за его пределы
   # последнее замечание относится к способу оптимизации.
   getPath: (num, breaks) ->
-    return "" if (@getLef t() >= @getRight()) or num > breaks.length
+    return "" if (@getLeft() >= @getRight()) or num > breaks.length
 
     points = []
     domain = @linearX.domain()
