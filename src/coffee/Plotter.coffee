@@ -5,6 +5,8 @@ Point = require './Point.coffee'
 PointPure = require './PointPure.coffee'
 Func = require './Func.coffee'
 FuncPure = require './FuncPure.coffee'
+ParametricArray = require './ParametricArray.coffee'
+ParametricArrayPure = require './ParametricArrayPure.coffee'
 Wrap = require './Wrap.coffee'
 
 class Plotter
@@ -26,33 +28,40 @@ class Plotter
     self = @
     @plot.emitter.on 'draw', () -> self.draw()
 
-    @points = new Wrap()
-    @functions = new Wrap()
+    @elements = new Wrap()
 
   draw: ->
     @plot.draw()
-
     [linearX, linearY] = [@plot.x, @plot.y]
-    @points.each (point) -> point.update linearX, linearY
-    @functions.each (func) -> func.update linearX, linearY
+    @elements.each (point) -> point.update linearX, linearY
 
   addPoint: (x, y, options) ->
     point = new Point new PointPure(x, y, options), @plot.graph, @plot.x, @plot.y, options
-    @points.addElement point
+    @elements.addElement point
     return point
 
   removePoint: (point) ->
     point.clear()
-    @points.removeElement point
+    @elements.removeElement point
 
   addFunc: (func, options) ->
+    options?.accuaracy ?= @plot.width
     obj = new Func new FuncPure(func, options), @plot.graph, @plot.x, @plot.y, options
-    @functions.addElement obj
+    @elements.addElement obj
     return obj
 
   removeFunc: (func) ->
+    func = @elements.removeElement func
     func.clear()
-    @functions.removeElement func
+
+  addArea: (array, options) ->
+    area = new ParametricArray new ParametricArrayPure(array, options), @plot.graph, @plot.x, @plot.y, options
+    @elements.addElement area
+    return area
+
+  removeArea: (area) ->
+    area = @elements.removeElement area
+    area.clear()
 
 module.exports = Plotter
 

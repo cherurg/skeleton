@@ -41,8 +41,7 @@ class Func
     breaks = _.filter @breaks, (el) -> left < el < right
 
     for i, el of @el
-      path = @getPath parseInt(i), breaks
-      el.attr 'd', path
+      el.attr 'd', @getPath(parseInt(i), breaks)
 
   # Кроме того, можно модифицировать массив точек, не
   # создавая его заново. Смотреть, какие точки остались в
@@ -86,11 +85,11 @@ class Func
     return Math.max @linearX.domain()[0], @pure.getLeft()
 
 Func.defaults =
-  accuracy: 300
+  accuracy: 800
   strokeWidth: 2
   color: colors(0)
   breaks: []
-  linearX: null
-  linearY: null
+  linearX: null #нужны ли?
+  linearY: null #нужны ли?
 
 module.exports = Func
