@@ -31,6 +31,9 @@ class Func
       i
     @update linearX, linearY
 
+  clear: ->
+    _.each @el, (f) -> f.remove()
+
   update: (linearX, linearY) ->
     [@linearX, @linearY] = [linearX, linearY]
 
@@ -52,7 +55,7 @@ class Func
     domain = @linearX.domain()
     step = (domain[1] - domain[0])/@accuracy
 
-    minValue = step/10000
+    minValue = step/10000000
     left = if num > 0
       breaks[num - 1] + minValue
     else

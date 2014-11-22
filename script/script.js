@@ -6,7 +6,7 @@ point.movable = true;
 
 arr = [-0.1, 0.1, 0.2, 0.3, 0.4, 0.5, 1];
 breaks = [-3, -2, -1, 0, 1, 2];
-plotter.addFunc(function (x) {
+var f = plotter.addFunc(function (x) {
     for (var i = 0; i < breaks.length; i++) {
         if (x < breaks[i]) {
             return arr[i]
@@ -16,5 +16,10 @@ plotter.addFunc(function (x) {
     return arr[arr.length - 1];
 
 }, {breaks: breaks, left: -4});
+
+plotter.removeFunc(f);
+plotter.draw();
+plotter.removePoint(point);
+
 //point.setSize('tiny');
 //point.update();
