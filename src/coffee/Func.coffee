@@ -31,6 +31,9 @@ class Func
       i
     @update linearX, linearY
 
+  clear: ->
+    _.each @el, (f) -> f.remove()
+
   update: (linearX, linearY) ->
     [@linearX, @linearY] = [linearX, linearY]
 
@@ -46,13 +49,13 @@ class Func
   # окне, а какие вышли за его пределы
   # последнее замечание относится к способу оптимизации.
   getPath: (num, breaks) ->
-    return "" if (@getLeft() >= @getRight()) or num > breaks.length
+    return "" if (@getLef t() >= @getRight()) or num > breaks.length
 
     points = []
     domain = @linearX.domain()
     step = (domain[1] - domain[0])/@accuracy
 
-    minValue = step/10000
+    minValue = step/10000000
     left = if num > 0
       breaks[num - 1] + minValue
     else

@@ -38,6 +38,9 @@ class Point
     .call @drag
     @update linearX, linearY
 
+  clear: ->
+    @el.remove()
+
   update: (linearX, linearY) ->
     [@linearX, @linearY] = [linearX, linearY]
     @el

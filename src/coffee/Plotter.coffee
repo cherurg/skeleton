@@ -42,7 +42,8 @@ class Plotter
     return point
 
   removePoint: (point) ->
-    @points.removePoint point
+    point.clear()
+    @points.removeElement point
 
   addFunc: (func, options) ->
     obj = new Func new FuncPure(func, options), @plot.graph, @plot.x, @plot.y, options
@@ -50,6 +51,7 @@ class Plotter
     return obj
 
   removeFunc: (func) ->
+    func.clear()
     @functions.removeElement func
 
 module.exports = Plotter

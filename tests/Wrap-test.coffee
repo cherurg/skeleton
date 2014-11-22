@@ -31,5 +31,5 @@ it 'Wrap', ->
   wrap.arr[0].should.have.property 'number', 1
   wrap.arr[0].should.have.property 'el', o2
 
-  wrap.removeElement b
+  wrap.removeElement o2
   wrap.arr.should.have.length 0

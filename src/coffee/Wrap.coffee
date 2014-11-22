@@ -17,7 +17,7 @@ class Wrap
     if _.isNumber el
       finder = (o) -> o.number is el
     else if el?.constructor?
-      finder = (o) -> o is el
+      finder = (o) -> o.el is el
 
     #достаем смертинка из массива
     dead = _.find @arr, finder
