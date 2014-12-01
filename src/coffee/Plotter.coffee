@@ -7,6 +7,8 @@ Func = require './Func.coffee'
 FuncPure = require './FuncPure.coffee'
 ParametricArray = require './ParametricArray.coffee'
 ParametricArrayPure = require './ParametricArrayPure.coffee'
+Line = require './Line.coffee'
+LinePure = require './LinePure.coffee'
 Wrap = require './Wrap.coffee'
 
 class Plotter
@@ -62,6 +64,15 @@ class Plotter
   removeArea: (area) ->
     area = @elements.removeElement area
     area.clear()
+
+  addLine: (x1, y1, x2, y2, options) ->
+    line = new Line new LinePure(x1, y1, x2, y2, options), @plot.graph, @plot.x, @plot.y, options
+    @elements.addElement line
+    return line
+
+  removeLine: (line) ->
+    line = @elements.removeElement line
+    line.clear()
 
 module.exports = Plotter
 
