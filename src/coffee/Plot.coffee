@@ -51,6 +51,9 @@ class Plot
     .attr 'stroke', @stroke
     .attr 'fill-opacity', 0
 
+    @axes = @svg
+    .append 'g'
+
     @graph = @svg
     .append 'svg'
     .attr 'width', @width
@@ -79,7 +82,7 @@ class Plot
     xTicks = @x.ticks @ticks
     .map @tickNull
 
-    gx = @svg.selectAll 'g.x'
+    gx = @axes.selectAll 'g.x'
     .data(xTicks, String)
     .attr "transform", @transformX.bind @
 
@@ -107,7 +110,7 @@ class Plot
     yTicks = @y.ticks @ticks
     .map @tickNull
 
-    gy = @svg.selectAll 'g.y'
+    gy = @axes.selectAll 'g.y'
     .data(yTicks, String)
     .attr "transform", @transformY.bind @
 
