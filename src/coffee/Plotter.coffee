@@ -35,7 +35,9 @@ class Plotter
   draw: ->
     @plot.draw()
     [linearX, linearY] = [@plot.x, @plot.y]
-    @elements.each (point) -> point.update linearX, linearY
+    @elements.each (element) -> element.update linearX, linearY
+
+    return @
 
   addPoint: (x, y, options) ->
     point = new Point new PointPure(x, y, options), @plot.graph, @plot.x, @plot.y, options
@@ -66,13 +68,16 @@ class Plotter
     area.clear()
 
   addLine: (x1, y1, x2, y2, options) ->
-    line = new Line new LinePure(x1, y1, x2, y2, options), @plot.graph, @plot.x, @plot.y, options
+    pure = new LinePure(x1, y1, x2, y2, options)
+    line = new Line(pure, @plot.graph, @plot.x, @plot.y, options)
     @elements.addElement line
     return line
 
   removeLine: (line) ->
     line = @elements.removeElement line
     line.clear()
+
+  getID: -> @id
 
 module.exports = Plotter
 

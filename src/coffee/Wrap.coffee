@@ -7,11 +7,15 @@ class Wrap
   # элегантно, но, вроде, идея и реализация очень простые. Если придумаю
   # что-то лучше, то сделаю.
 
-  addElement: (el) ->
+  #устаревшие методы
+  addElement: (el) -> @add el
+  removeElement: (el) -> @remove el
+
+  add: (el) ->
     @arr.push el: el, number: @number++
     return _.last @arr
 
-  removeElement: (el) ->
+  remove: (el) ->
     # аргумент может быть как номером, так и самим объектом для удаления
     # Что бы это ни было, нужно найти это в массиве и удалить.
     if _.isNumber el
@@ -23,7 +27,7 @@ class Wrap
     dead = _.find @arr, finder
 
     unless dead?
-      console.log "removeElement: не найден элемент " + el
+      console.log "remove: не найден элемент " + el
       return
 
     # удаляем смертника
