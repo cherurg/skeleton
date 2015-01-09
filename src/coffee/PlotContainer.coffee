@@ -11,15 +11,21 @@ class PlotContainer
     @plotterCounter = 0
 
   addPlot: (options = {}) ->
+    newId = @addEmptyDiv()
+
+    plotter = new Plotter(newId, options)
+    @plotters.add plotter
+
+    return plotter
+
+  addEmptyDiv: ->
     newId = 'plotter' + @plotterCounter++
 
     d3.select(@id)
     .append('div')
     .attr('id', newId)
 
-    plotter = new Plotter(newId, options)
-    @plotters.add plotter
-    return plotter
+    return newId
 
 module.exports = PlotContainer
 window.PlotContainer = PlotContainer

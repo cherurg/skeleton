@@ -6,8 +6,8 @@
 Для создания графика нужно передать в конструктор ```Plotter``` id DOM-элемента, где дальше будет отрисовываться график. Затем нужно вызвать метод ```Plotter.draw()```
 
 ```javascript
-    var plotter = new Plotter("plot", options);
-    plotter.draw();
+var plotter = new Plotter("plot", options);
+plotter.draw();
 ```
 
 Дальше методы указываются в формате:
@@ -120,6 +120,40 @@
 ```height = 600```
 
 ```ticks = 10   //количество линий координатной сетки```
+
+# PlotContainer, несколько графиков на одной странице
+Как и Plotter, PlotContainer является глобальным объектом. Он служит для того, чтобы DOM-элемент с указанным ID работал
+в качестве контейнера для других DOM-элементов, которые, в свою очередь могут содержать либо графики, либо произвольный
+html-код.
+
+```Plotter PlotContainer.addPlot(options)   //добавляет в DOM-контейнер график и возвращает его. Возвращает то же самое,
+что и конструктор Plotter.```
+
+```DOM_ID PlotContainer.addEmptyDiv()       //создает в контейнере пустой <div> и возвращает его ID. Можно использовать,
+например, для дальнейшей работы с Controls.
+```
+
+Инициализация контейнера и создание графика в нем:
+
+```javascript
+    var container = new PlotContainer("plot");
+
+    var plotter = container.addPlot();
+    plotter.draw();
+```
+
+Второй график можно создать также, как и первый:
+
+```javascript
+    var plotter2 = container.addPlot();
+    plotter2.draw();
+```
+
+Также для создания графика можно использовать более короткий синтаксис:
+
+```javascript
+    var plotter3 = container.addPlot().draw();
+```
 
 #Примеры
 Их можно посмотреть в папке scripts. В index.html можно менять имя подключаемого файла, чтобы смотреть разные примеры.
