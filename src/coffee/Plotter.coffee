@@ -32,6 +32,8 @@ class Plotter
 
     @elements = new Wrap()
 
+  redraw: -> @draw()
+
   draw: ->
     @plot.draw()
     [linearX, linearY] = [@plot.x, @plot.y]

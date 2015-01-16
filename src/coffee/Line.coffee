@@ -34,6 +34,11 @@ class Line
   clear: ->
     do @el.remove
 
+  setX1: (x1) -> @pure.x1 = x1
+  setX2: (x2) -> @pure.x2 = x2
+  setY1: (y1) -> @pure.y1 = y1
+  setY2: (y2) -> @pure.y2 = y2
+
 Line.defaults =
   strokeWidth: 2
   color: colors(0)
