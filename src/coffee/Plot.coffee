@@ -28,6 +28,9 @@ class Plot
     .style 'user-select', 'none'
 
     # plot должен быть класса PlotPure.
+    #console.log "plotPure: " + plotPure
+    #console.log "plotPureConstructorName: " + plotPure?.constructor?.name
+    #две строчки выше -- для issue на github
     unless plotPure? and plotPure?.constructor?.name is "PlotPure"
       throw @constructor.name + ": Неверный аргумент plot -- " + plotPure
     @pure = plotPure

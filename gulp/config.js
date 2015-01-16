@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 var dest = "./dist";
 var src = './src';
 var tests = './tests';
@@ -45,5 +47,15 @@ module.exports = {
   },
   tests: {
     source: tests + "/*-test.*"
+  },
+  concat: {
+    bundles: [{
+      entries: _.map(['ControlSkeleton.js','plot.js'], function (entry) {
+          return dest + "/js/" + entry;
+      }),
+      name: "SkeletonWithControl.js",
+      miniName: "SkeletonWithControl.min.js",
+      dest: dest + "/js"
+    }]
   }
 };
