@@ -66,13 +66,12 @@ class Func
 
     x = (left // step) * step + step
 
-    points.push x: left, y: @pure.func left
-
+    points.push x: left, y: @yMax(@pure.func left)
     while x <= right
       y = @pure.func x
-      points.push x: x, y: y
+      points.push x: x, y: @yMax(y)
       x += step
-    points.push x: right, y: @pure.func right unless x is right
+    points.push x: right, y: @yMax(@pure.func right) unless x is right
 
     return @path points
 
@@ -83,6 +82,14 @@ class Func
   getLeft: ->
     return @linearX.domain()[0] unless @pure.getLeft()?
     return Math.max @linearX.domain()[0], @pure.getLeft()
+
+  yMax: (y) ->
+    top = 1000000
+    y = if y > top
+      top
+    else if y < -top
+      -top
+    else y
 
 Func.defaults =
   accuracy: 800
