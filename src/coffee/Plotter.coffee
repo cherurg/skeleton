@@ -46,28 +46,16 @@ class Plotter
     @elements.addElement point
     return point
 
-  removePoint: (point) ->
-    point.clear()
-    @elements.removeElement point
-
   addFunc: (func, options) ->
     options?.accuaracy ?= @plot.width
     obj = new Func new FuncPure(func, options), @plot.graph, @plot.x, @plot.y, options
     @elements.addElement obj
     return obj
 
-  removeFunc: (func) ->
-    func = @elements.removeElement func
-    func.clear()
-
   addArea: (array, options) ->
     area = new ParametricArray new ParametricArrayPure(array, options), @plot.graph, @plot.x, @plot.y, options
     @elements.addElement area
     return area
-
-  removeArea: (area) ->
-    area = @elements.removeElement area
-    area.clear()
 
   addLine: (x1, y1, x2, y2, options) ->
     pure = new LinePure(x1, y1, x2, y2, options)
@@ -75,13 +63,13 @@ class Plotter
     @elements.addElement line
     return line
 
-  removeLine: (line) ->
-    line = @elements.removeElement line
-    line.clear()
+  remove: (element) ->
+    element = @elements.removeElement element
+    element.clear()
 
   getID: -> @id
 
-Plotter.version = "0.0.2"
+Plotter.version = "0.0.3"
 module.exports = Plotter
 
 # делаем Plotter видимым глобально
