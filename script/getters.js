@@ -5,7 +5,7 @@ var plotter = container.addPlot(/*{
     right: 2
 }*/);
 
-plotter.draw();
+//plotter.draw();
 
 var func = plotter.addFunc(function (x) {
     return Math.sin(x)/x;

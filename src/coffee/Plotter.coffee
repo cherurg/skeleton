@@ -31,6 +31,7 @@ class Plotter
     @plot.emitter.on 'draw', () -> self.draw()
 
     @elements = new Wrap()
+    @draw()
 
   redraw: -> @draw()
 
