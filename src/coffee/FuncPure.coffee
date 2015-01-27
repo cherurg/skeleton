@@ -6,7 +6,10 @@ class FuncPure
     _.extend @, FuncPure.defaults, _.pick(options, _.keys FuncPure.defaults)
 
   getRight: -> @right
+  setRight: (right) -> @right = right
+
   getLeft: -> @left
+  setLeft: (left) -> @left = left
 
 FuncPure.defaults =
   left: null

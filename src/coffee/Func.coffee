@@ -35,9 +35,9 @@ class Func
     _.each @el, (f) -> f.remove()
 
   update: (linearX, linearY) ->
-    [@linearX, @linearY] = [linearX, linearY]
+    [@linearX, @linearY] = [linearX, linearY] if linearX? and linearY?
 
-    [left, right] = [@getLeft(), @getRight()]
+    [left, right] = [@left(), @right()]
     breaks = _.filter @breaks, (el) -> left < el < right
 
     for i, el of @el
@@ -48,7 +48,7 @@ class Func
   # окне, а какие вышли за его пределы
   # последнее замечание относится к способу оптимизации.
   getPath: (num, breaks) ->
-    return "" if (@getLeft() >= @getRight()) or num > breaks.length
+    return "" if (@left() >= @right()) or num > breaks.length
 
     points = []
     domain = @linearX.domain()
@@ -58,11 +58,11 @@ class Func
     left = if num > 0
       breaks[num - 1] + minValue
     else
-      @getLeft()
+      @left()
     right = if breaks.length > 0 and num isnt breaks.length
       breaks[num] - minValue
     else
-      @getRight()
+      @right()
 
     x = (left // step) * step + step
 
@@ -75,11 +75,11 @@ class Func
 
     return @path points
 
-  getRight: ->
+  right: ->
     return @linearX.domain()[1] unless @pure.getRight()?
     return Math.min @linearX.domain()[1], @pure.getRight()
 
-  getLeft: ->
+  left: ->
     return @linearX.domain()[0] unless @pure.getLeft()?
     return Math.max @linearX.domain()[0], @pure.getLeft()
 
@@ -91,12 +91,52 @@ class Func
       -top
     else y
 
+  getAccuracy: -> @accuracy
+  setAccuracy: (accuracy) ->
+    @accuracy = accuracy
+    @update()
+    accuracy
+  Accuracy: (accuracy) ->
+    if accuracy? then @setAccuracy(accuracy) else @getAccuracy()
+
+  getStrokeWidth: -> @strokeWidth
+  setStrokeWidth: (strokeWidth) ->
+    @strokeWidth = strokeWidth
+    @update()
+    strokeWidth
+  strokeWidth: (strokeWidth) ->
+    if strokeWidth? then @setStrokeWidth(strokeWidth) else @getStrokeWidth()
+
+  getColor: -> @color
+  getColour: -> @getColor()
+  setColor: (color) ->
+    @color = colors(color) if _.isNumber(color)
+    @color = color if _.isString(color) and color[0] is "#"
+    @update()
+  setColour: (colour) -> @setColor(colour)
+  Color: (color) -> if color? then @setColor(color) else @getColor()
+  Colour: (colour) -> @Color(colour)
+
+  getBreaks: -> @breaks
+  setBreaks: (breaks) -> @breaks = breaks
+  Breaks: (breaks) -> if breaks? then @setBreaks(breaks) else @getBreaks()
+
+  getLeft: -> @pure.getLeft()
+  setLeft: (left) -> @pure.setLeft(left)
+  Left: (left) -> if left? then @setLeft(left) else @getLeft()
+
+  getRight: -> @pure.getRight()
+  setRight: (right) -> @pure.setRight(right)
+  Right: (right) -> if right? then @setRight(right) else @getRight()
+
+  getFunc: -> @pure.func
+  setFunc: (func) -> @pure.func = func
+  Func: (func) -> if func? then @setFunc(func) else @getFunc()
+
 Func.defaults =
   accuracy: 800
   strokeWidth: 2
   color: colors(0)
   breaks: []
-  linearX: null #нужны ли?
-  linearY: null #нужны ли?
 
 module.exports = Func
