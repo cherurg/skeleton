@@ -80,7 +80,7 @@ class Plotter
 
   getID: -> @id
 
-Plotter.version = "0.0.4"
+Plotter.version = "0.0.5"
 module.exports = Plotter
 
 # делаем Plotter видимым глобально

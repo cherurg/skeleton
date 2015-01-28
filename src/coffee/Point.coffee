@@ -42,7 +42,7 @@ class Point
     @el.remove()
 
   update: (linearX, linearY) ->
-    [@linearX, @linearY] = [linearX, linearY]
+    [@linearX, @linearY] = [linearX, linearY] if linearX? and linearY?
     @el
     .attr 'cx', @linearX @pure.x
     .attr 'cy' ,@linearY @pure.y
@@ -55,16 +55,29 @@ class Point
     else if _.isString size
       @size = @sizeScale size
 
-  setColor: (color) ->
-    if _.isNumber color
-      @color = colors color
-    else if _.isString color and color[0] is "#"
-      @color = color
+    @update() if @el?
 
-  setX: (x) -> @pure.x = x
-  setY: (y) -> @pure.y = y
+  getSize: -> @size
+  Size: (size) -> if size? then @setSize(size) else @getSize()
+
   getX: () ->  @pure.x
+  setX: (x) -> @pure.x = x
+  X: (x) -> if x? then @setX(x) else @getX()
+
   getY: () ->  @pure.y
+  setY: (y) -> @pure.y = y
+  Y: (y) -> if y? then @setY(y) else @getY()
+
+  getColor: -> @color
+  getColour: -> @getColor()
+  setColor: (color) ->
+    @color = colors(color) if _.isNumber(color)
+    @color = color if _.isString(color) and color[0] is "#"
+    @update() if @el?
+    @color
+  setColour: (colour) -> @setColor(colour)
+  Color: (color) -> if color? then @setColor(color) else @getColor()
+  Colour: (colour) -> @Color(colour)
 
 
 ######

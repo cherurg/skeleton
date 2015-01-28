@@ -3,7 +3,7 @@ _ = require 'lodash'
 colors = require './Colors.coffee'
 
 class Func
-  constructor: (functionPure, graph, linearX, linearY, options) ->
+  constructor: (functionPure, graph, linearX, linearY, options = {}) ->
     @pure = functionPure
     _.extend @, Func.defaults, _.pick(options, _.keys Func.defaults)
     @breaks = _.sortBy @breaks, (el) -> return el
@@ -24,9 +24,6 @@ class Func
       path = @g
       .append 'path'
       .classed 'function', true
-      .attr 'fill', 'none'
-      .attr 'stroke-width', @strokeWidth
-      .attr 'stroke', @color
       @el.push path
       i
     @update linearX, linearY
@@ -42,6 +39,9 @@ class Func
 
     for i, el of @el
       el.attr 'd', @getPath(parseInt(i), breaks)
+      .attr 'fill', 'none'
+      .attr 'stroke-width', @strokeWidth
+      .attr 'stroke', @color
 
   # Кроме того, можно модифицировать массив точек, не
   # создавая его заново. Смотреть, какие точки остались в
@@ -113,6 +113,7 @@ class Func
     @color = colors(color) if _.isNumber(color)
     @color = color if _.isString(color) and color[0] is "#"
     @update()
+    @color
   setColour: (colour) -> @setColor(colour)
   Color: (color) -> if color? then @setColor(color) else @getColor()
   Colour: (colour) -> @Color(colour)

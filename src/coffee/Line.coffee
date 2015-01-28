@@ -53,6 +53,7 @@ class Line
     @color = colors(color) if _.isNumber(color)
     @color = color if _.isString(color) and color[0] is "#"
     @update()
+    @color
   setColour: (colour) -> @setColor(colour)
   Color: (color) -> if color? then @setColor(color) else @getColor()
   Colour: (colour) -> @Color(colour)
