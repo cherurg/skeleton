@@ -21,4 +21,14 @@ var area = plot.addArea(arr, {
     fill: 10
 });
 
+plot.addPoint(1, 1);
+
+plot.removeAll();
+
+plot.addPoint(1, 2);
+
+plot.addPoint(2, 1);
+
+plot.addLine(1, 2, 2, 1);
+
 //area.Fill(10);

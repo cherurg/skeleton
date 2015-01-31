@@ -78,9 +78,13 @@ class Plotter
     element = @elements.removeElement element
     element.clear()
 
+  removeAll: ->
+    @elements.each (el) -> el.clear()
+    @elements.removeAll()
+
   getID: -> @id
 
-Plotter.version = "0.0.5"
+Plotter.version = "0.0.6"
 module.exports = Plotter
 
 # делаем Plotter видимым глобально

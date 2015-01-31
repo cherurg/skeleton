@@ -1,7 +1,4 @@
-var plotter = new Plotter("plot", {
-    left: -5,
-    right: 5
-});
+var plotter = new Plotter("plot");
 
 var array = [];
 array.push({
@@ -24,7 +21,3 @@ array.push({
 var area = plotter.addArea(array, {
     strokeWidth: 1
 });
-
-var line = plotter.addLine(0, 0, 1, 1);
-
-//plotter.removeArea(area);

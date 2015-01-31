@@ -1,3 +1,4 @@
+/*
 var net = new Plotter("plot");
 
 var b;
@@ -14,4 +15,15 @@ rowtop.setColor(7);
 
 var point = net.addPoint(1, 1);
 point.Color(8);
-point.Size("tiny");
+point.Size("tiny");*/
+
+var c = new PlotContainer("plot");
+c.addPlot({
+    height: 400,
+    width: 400
+});
+
+c.addPlot({
+    height: 400,
+    width: 400
+});

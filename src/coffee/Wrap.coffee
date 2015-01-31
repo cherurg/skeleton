@@ -2,10 +2,7 @@ _ = require 'lodash'
 
 class Wrap
   constructor: ->
-    @arr = []
-    @number = 0 # персональные идентификаторы элементов. Возможно, не очень
-  # элегантно, но, вроде, идея и реализация очень простые. Если придумаю
-  # что-то лучше, то сделаю.
+    @init()
 
   #устаревшие методы
   addElement: (el) -> @add el
@@ -38,5 +35,10 @@ class Wrap
   each: (func) ->
     arr = _.map @arr, (o) -> o.el
     _.each arr, func
+
+  init: -> @removeAll()
+  removeAll: ->
+    @arr = []
+    @number = 0
 
 module.exports = Wrap
