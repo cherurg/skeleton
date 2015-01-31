@@ -284,5 +284,13 @@ html-код.
     var plotter2 = container.addPlot();
 ```
 
+Кроме того, в метод можно передавать опции, как это делает с конструктором Plotter:
+```javascript
+ var plotter3 = container.addPlot({
+   width: 400,
+   height: 400
+  });
+ ```
+
 #Примеры
 Их можно посмотреть в папке scripts. В index.html можно менять имя подключаемого файла, чтобы смотреть разные примеры.
