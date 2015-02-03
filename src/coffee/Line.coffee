@@ -1,13 +1,14 @@
 d3 = require '../libs/d3/d3.js'
 _ = require 'lodash'
-colors = require './Colors.coffee'
+Colors = require('./Colors.coffee')('Color')
+Colours = require('./Colors.coffee')('Colour', 'color')
 
 class Line
+  _.extend(@::, Colors::, Colours::)
+
   constructor: (linePure, graph, linearX, linearY, options = {}) ->
     @pure = linePure
     _.extend @, Line.defaults, _.pick(options, _.keys Line.defaults)
-
-    @color = colors(@color) if _.isNumber(@color)
 
     @draw graph, linearX, linearY
 
@@ -25,7 +26,7 @@ class Line
     .attr 'x2', @linearX @pure.x2
     .attr 'y1', @linearY @pure.y1
     .attr 'y2', @linearY @pure.y2
-    .attr 'stroke', @color
+    .attr 'stroke', @Color()
     .attr 'stroke-width', @strokeWidth
 
   clear: ->
@@ -47,19 +48,8 @@ class Line
   getY2: -> @pure.y2
   Y2: (y2) -> if y2? then @setY2(y2) else @getY2()
 
-  getColor: -> @color
-  getColour: -> @getColor()
-  setColor: (color) ->
-    @color = colors(color) if _.isNumber(color)
-    @color = color if _.isString(color) and color[0] is "#"
-    @update()
-    @color
-  setColour: (colour) -> @setColor(colour)
-  Color: (color) -> if color? then @setColor(color) else @getColor()
-  Colour: (colour) -> @Color(colour)
-
 Line.defaults =
   strokeWidth: 2
-  color: colors(0)
+  color: 0
 
 module.exports = Line

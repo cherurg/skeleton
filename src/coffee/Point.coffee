@@ -1,10 +1,14 @@
 d3 = require '../libs/d3/d3.js'
 _ = require 'lodash'
-colors = require './Colors.coffee'
+Colors = require('./Colors.coffee')('Color')
+Colours = require('./Colors.coffee')('Colour', 'color')
 
 class Point
+  _.extend(@::, Colors::, Colours::)
+
   constructor: (pointPure, graph, linearX, linearY, options) ->
     @pure = pointPure
+
     _.extend(@, Point.defaults, options)
 
     @draw graph, linearX, linearY
@@ -20,8 +24,6 @@ class Point
 
     # на случай, если в options размер был указан словом, а цвет - цифрой
     @setSize @size
-    @setColor @color
-
 
     # сделать у @ свойство drag.
     Point.behavior.call @, @behaviorType
@@ -47,7 +49,7 @@ class Point
     .attr 'cx', @linearX @pure.x
     .attr 'cy' ,@linearY @pure.y
     .attr 'r', @size
-    .attr 'fill', @color
+    .attr 'fill', @Color()
 
   setSize: (size) ->
     if _.isNumber size
@@ -67,17 +69,6 @@ class Point
   getY: () ->  @pure.y
   setY: (y) -> @pure.y = y
   Y: (y) -> if y? then @setY(y) else @getY()
-
-  getColor: -> @color
-  getColour: -> @getColor()
-  setColor: (color) ->
-    @color = colors(color) if _.isNumber(color)
-    @color = color if _.isString(color) and color[0] is "#"
-    @update() if @el?
-    @color
-  setColour: (colour) -> @setColor(colour)
-  Color: (color) -> if color? then @setColor(color) else @getColor()
-  Colour: (colour) -> @Color(colour)
 
 
 ######
@@ -112,7 +103,7 @@ Point.behavior = (type) ->
 
 Point.defaults =
   movable: false
-  color: colors(6) #d62728 - красный
+  color: 6 #d62728 - красный
   size: 3
   behaviorType: 'free'
 

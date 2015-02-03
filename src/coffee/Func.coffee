@@ -1,8 +1,11 @@
 d3 = require '../libs/d3/d3.js'
 _ = require 'lodash'
-colors = require './Colors.coffee'
+Colors = require('./Colors.coffee')('Color')
+Colours = require('./Colors.coffee')('Colour', 'color')
 
 class Func
+  _.extend(@::, Colors::, Colours::)
+
   constructor: (functionPure, graph, linearX, linearY, options = {}) ->
     @pure = functionPure
     _.extend @, Func.defaults, _.pick(options, _.keys Func.defaults)
@@ -41,7 +44,7 @@ class Func
       el.attr 'd', @getPath(parseInt(i), breaks)
       .attr 'fill', 'none'
       .attr 'stroke-width', @strokeWidth
-      .attr 'stroke', @color
+      .attr 'stroke', @Color()
 
   # Кроме того, можно модифицировать массив точек, не
   # создавая его заново. Смотреть, какие точки остались в
@@ -107,17 +110,6 @@ class Func
   strokeWidth: (strokeWidth) ->
     if strokeWidth? then @setStrokeWidth(strokeWidth) else @getStrokeWidth()
 
-  getColor: -> @color
-  getColour: -> @getColor()
-  setColor: (color) ->
-    @color = colors(color) if _.isNumber(color)
-    @color = color if _.isString(color) and color[0] is "#"
-    @update()
-    @color
-  setColour: (colour) -> @setColor(colour)
-  Color: (color) -> if color? then @setColor(color) else @getColor()
-  Colour: (colour) -> @Color(colour)
-
   getBreaks: -> @breaks
   setBreaks: (breaks) -> @breaks = breaks
   Breaks: (breaks) -> if breaks? then @setBreaks(breaks) else @getBreaks()
@@ -137,7 +129,7 @@ class Func
 Func.defaults =
   accuracy: 800
   strokeWidth: 2
-  color: colors(0)
+  color: 0
   breaks: []
 
 module.exports = Func

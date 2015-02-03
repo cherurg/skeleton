@@ -26,4 +26,46 @@ d3 = require '../libs/d3/d3.js'
 colors = d3.scale.category20().domain [0..20]
 colors.range().push "#000000"
 
-module.exports = colors
+###class Colors
+  getColor: -> if _.isString @color then @color else @setColor(@color)
+
+  setColor: (color) ->
+    @color = colors(color) if _.isNumber(color)
+    @color = color if _.isString(color) and color[0] is "#"
+    @update() if @el?
+    @color
+
+  Color: (color) ->
+    if color?
+      @setColor(color)
+    else
+      @getColor()
+
+  setColour: (colour) -> @setColor(colour)
+  Colour: (colour) -> @Color(colour)
+  getColour: -> @getColor()###
+
+module.exports = (klass, property) ->
+  class Colors
+    constructor: ->
+
+  Colors.get = (number) -> colors(number)
+
+  property = klass[0].toLowerCase() + klass.slice(1) unless property?
+
+  Colors::['get' + klass] = ->
+    if _.isString @[property] then @[property] else @['set' + klass](@[property])
+
+  Colors::['set' + klass] = (color) ->
+    @[property] = colors(color) if _.isNumber(color)
+    @[property] = color if _.isString(color) and color[0] is "#"
+    @update() if @el?
+    @[property]
+
+  Colors::[klass] = (color) ->
+    if color?
+      @['set' + klass](color)
+    else
+      @['get' + klass]()
+
+  return Colors
