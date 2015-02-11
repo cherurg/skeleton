@@ -9,12 +9,14 @@ var func = plot.addFunc(function (x) {
 });
 
 
-var text = "Коэффициент a: ";
-var range = controls.addRange(function (value) {
+function changeRange (value) {
     range.setText(text + value);
     plot.remove(func);
     func = plot.addFunc(function (x) {
         return value*x;
     });
 
-}, text + "1", -1, 1, 0.01, 1);
+}
+
+var text = "Коэффициент a: ";
+var range = controls.addRange(changeRange, text + "1", -1, 1, 0.01, 1);
