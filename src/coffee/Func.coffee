@@ -38,10 +38,10 @@ class Func
     [@linearX, @linearY] = [linearX, linearY] if linearX? and linearY?
 
     [left, right] = [@left(), @right()]
-    breaks = _.filter @breaks, (el) -> left < el < right
+    @currentBreaks = _.filter @breaks, (el) -> left < el < right
 
     for i, el of @el
-      el.attr 'd', @getPath(parseInt(i), breaks)
+      el.attr 'd', @getPath(parseInt(i))
       .attr 'fill', 'none'
       .attr 'stroke-width', @strokeWidth
       .attr 'stroke', @Color()
@@ -50,8 +50,8 @@ class Func
   # создавая его заново. Смотреть, какие точки остались в
   # окне, а какие вышли за его пределы
   # последнее замечание относится к способу оптимизации.
-  getPath: (num, breaks) ->
-    return "" if (@left() >= @right()) or num > breaks.length
+  getPath: (num) ->
+    return "" if (@left() >= @right()) or num > @currentBreaks.length
 
     points = []
     domain = @linearX.domain()
@@ -59,11 +59,11 @@ class Func
 
     minValue = step/10000000
     left = if num > 0
-      breaks[num - 1] + minValue
+      @currentBreaks[num - 1] + minValue
     else
       @left()
-    right = if breaks.length > 0 and num isnt breaks.length
-      breaks[num] - minValue
+    right = if @currentBreaks.length > 0 and num isnt @currentBreaks.length
+      @currentBreaks[num] - minValue
     else
       @right()
 

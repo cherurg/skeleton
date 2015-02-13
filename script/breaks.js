@@ -17,9 +17,9 @@ var f = plotter.addFunc(function (x) {
 
 }, {breaks: breaks, left: -4});
 
-plotter.removeFunc(f);
-plotter.draw();
-plotter.removePoint(point);
+//plotter.remove(f);
+//plotter.draw();
+//plotter.remove(point);
 
 //point.setSize('tiny');
 //point.update();
