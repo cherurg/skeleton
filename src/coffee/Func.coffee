@@ -126,6 +126,9 @@ class Func
   setFunc: (func) -> @pure.func = func
   Func: (func) -> if func? then @setFunc(func) else @getFunc()
 
+  getPathQuantity: -> @pathQuantity()
+  pathQuantity: -> @el.length
+
 Func.defaults =
   accuracy: 800
   strokeWidth: 2
