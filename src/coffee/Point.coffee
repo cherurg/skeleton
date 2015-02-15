@@ -28,15 +28,14 @@ class Point
     # сделать у @ свойство drag.
     Point.behavior.call @, @behaviorType
 
-    self = @
     @el = graph
     .append 'circle'
     .classed 'point', true
-    .on 'mousedown', ->
+    .on 'mousedown', =>
       # когда нажимаем на точку со свойством movable, то нам нужно позаботиться
       # о том, чтобы с движением точки не обрабатывалось еще и событие zoom
       # графика. stopPropagation нам в этом помогает.
-      d3.event.stopPropagation() if self.movable
+      d3.event.stopPropagation() if @movable
     .call @drag
     @update linearX, linearY
 
@@ -70,6 +69,9 @@ class Point
   setY: (y) -> @pure.y = y
   Y: (y) -> if y? then @setY(y) else @getY()
 
+  setMovable: (movable) -> @movable = movable
+  getMovable: -> @movable
+  Movable: (movable) -> if movable? then @setMovable(movable) else @getMovable()
 
 ######
 # поведения и их описания
@@ -83,10 +85,9 @@ Point.freeBehavior = ->
   @pure.y = @linearY.invert @el.attr('cy')
 
 Point._behaviorTemplate = (behavior) ->
-  self = @
-  return ->
-    return unless self.movable
-    behavior.call self
+  =>
+    return unless @movable
+    behavior?.call @
 
 Point.behavior = (type) ->
   return unless _.isString type
@@ -95,11 +96,14 @@ Point.behavior = (type) ->
 
   # в случае, если в рантайме нужно будет поменять поведение, то достаточно
   # будет изменить функцию, вызываемую .on 'drag'
-  if type is 'free'
-    @drag
-    .on 'drag', Point._behaviorTemplate.call(@, Point.freeBehavior.bind @)
+  behaviour = Point.behaviorTypes[type].bind(@)
+  @drag
+  .on 'drag', Point._behaviorTemplate.call(@, behaviour)
 
   return @drag
+
+Point.behaviorTypes =
+  'free': Point.freeBehavior
 
 Point.defaults =
   movable: false

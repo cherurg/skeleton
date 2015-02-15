@@ -14,10 +14,9 @@ class Func
     @draw graph, linearX, linearY
 
   draw: (graph, linearX, linearY) ->
-    self = @
     @path = d3.svg.line()
-    .x (d) -> self.linearX d.x
-    .y (d) -> self.linearY d.y
+    .x (d) => @linearX d.x
+    .y (d) => @linearY d.y
 
     @g = graph
     .append 'g'
