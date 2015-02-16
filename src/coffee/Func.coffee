@@ -127,6 +127,26 @@ class Func
 
   getPathQuantity: -> @pathQuantity()
   pathQuantity: -> @el.length
+  ### метод добавления закрашенной области между графиком в указанном интервале leftborder, rightborder и указанной осью axis текущий формат "Ox" "Oy"
+  ##drawArea: (leftborder ,rightborder,axis) ->
+    drawnArea = [] ##массив многоугольников
+    if axis == "Ox" ##x если между графиком и осью х
+      for i in [1...@pathQuantity()] ##проходим по всем path
+        drawnArea[i] = [] ##массив подъодящих точек функции + точки границы на оси составляют многоугольник
+        for j in [0...@getPath(i).lenght()-1] ##пробегаемся по каждому path
+         if @getPath(i)[j].x >= leftborder && @getPath(i)[j].x <= rightborder ##проверям точки на пренадлежность диапозону каждого path 
+            drawnArea[i].push @getPath(i)[j] ##добавляем подходящую точку
+        drawnArea[i].push x:max(leftborder,@getPath(i)[0].x) y:0 ##левая краевая точка на оси
+        drawnArea[i].push x:min(rightborder,@getPath(i)[@getPath(i).lenght()-1].x) y:0 ## правая краевая точка на оси
+    else if axis == "Oy" ##  тоже самое для оси у
+      for i in [1...@pathQuantity()]
+        drawnArea[i] = []
+        for j in [0...@getPath(i).lenght()-1]
+         if @getPath(i)[j].y >= leftborder && @getPath(i)[j].y <= rightborder
+            drawnArea[i].push @getPath(i)[j]
+        drawnArea[i].push x:0 y:max(leftborder,@getPath(i)[0].y)
+        drawnArea[i].push x:0 y:min(rightborder,@getPath(i)[@getPath(i).lenght()-1].y)
+    код предположительно содержащий огромное количество синтаксических ошибок, набросок### 
 
 Func.defaults =
   accuracy: 800
