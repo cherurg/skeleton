@@ -2,13 +2,22 @@ d3 = require '../libs/d3/d3.js'
 _ = require 'lodash'
 Colors = require('./Colors.coffee')('Color')
 Colours = require('./Colors.coffee')('Colour', 'color')
+Fill = require('./Colors.coffee')('Fill')
 
 class Func
-  _.extend(@::, Colors::, Colours::)
+  _.extend(@::, Colors::, Colours::, Fill::)
+
+  defaults:
+    accuracy: 800
+    strokeWidth: 2
+    color: 0
+    breaks: []
+    fill: 'none'
+    fillOpacity: null
 
   constructor: (functionPure, graph, linearX, linearY, options = {}) ->
     @pure = functionPure
-    _.extend @, Func.defaults, _.pick(options, _.keys Func.defaults)
+    _.extend @, @defaults, _.pick(options, _.keys @defaults)
     @breaks = _.sortBy @breaks, (el) -> return el
 
     @draw graph, linearX, linearY
@@ -39,9 +48,10 @@ class Func
     [left, right] = [@left(), @right()]
     @currentBreaks = _.filter @breaks, (el) -> left < el < right
 
-    for i, el of @el
-      el.attr 'd', @getPath(parseInt(i))
-      .attr 'fill', 'none'
+    for el, i in @el
+      el.attr 'd', @path(@getPoints i)
+      .attr 'fill', @Fill()
+      .attr 'fill-opacity', @fillOpacity
       .attr 'stroke-width', @strokeWidth
       .attr 'stroke', @Color()
 
@@ -49,8 +59,8 @@ class Func
   # создавая его заново. Смотреть, какие точки остались в
   # окне, а какие вышли за его пределы
   # последнее замечание относится к способу оптимизации.
-  getPath: (num) ->
-    return "" if (@left() >= @right()) or num > @currentBreaks.length
+  getPoints: (num) ->
+    return [] if (@left() >= @right()) or num > @currentBreaks.length
 
     points = []
     domain = @linearX.domain()
@@ -75,7 +85,7 @@ class Func
       x += step
     points.push x: right, y: @yMax(@pure.func right) unless x is right
 
-    return @path points
+    return points
 
   right: ->
     return @linearX.domain()[1] unless @pure.getRight()?
@@ -127,31 +137,5 @@ class Func
 
   getPathQuantity: -> @pathQuantity()
   pathQuantity: -> @el.length
-  ### метод добавления закрашенной области между графиком в указанном интервале leftborder, rightborder и указанной осью axis текущий формат "Ox" "Oy"
-  ##drawArea: (leftborder ,rightborder,axis) ->
-    drawnArea = [] ##массив многоугольников
-    if axis == "Ox" ##x если между графиком и осью х
-      for i in [1...@pathQuantity()] ##проходим по всем path
-        drawnArea[i] = [] ##массив подъодящих точек функции + точки границы на оси составляют многоугольник
-        for j in [0...@getPath(i).lenght()-1] ##пробегаемся по каждому path
-         if @getPath(i)[j].x >= leftborder && @getPath(i)[j].x <= rightborder ##проверям точки на пренадлежность диапозону каждого path 
-            drawnArea[i].push @getPath(i)[j] ##добавляем подходящую точку
-        drawnArea[i].push x:max(leftborder,@getPath(i)[0].x) y:0 ##левая краевая точка на оси
-        drawnArea[i].push x:min(rightborder,@getPath(i)[@getPath(i).lenght()-1].x) y:0 ## правая краевая точка на оси
-    else if axis == "Oy" ##  тоже самое для оси у
-      for i in [1...@pathQuantity()]
-        drawnArea[i] = []
-        for j in [0...@getPath(i).lenght()-1]
-         if @getPath(i)[j].y >= leftborder && @getPath(i)[j].y <= rightborder
-            drawnArea[i].push @getPath(i)[j]
-        drawnArea[i].push x:0 y:max(leftborder,@getPath(i)[0].y)
-        drawnArea[i].push x:0 y:min(rightborder,@getPath(i)[@getPath(i).lenght()-1].y)
-    код предположительно содержащий огромное количество синтаксических ошибок, набросок### 
-
-Func.defaults =
-  accuracy: 800
-  strokeWidth: 2
-  color: 0
-  breaks: []
 
 module.exports = Func

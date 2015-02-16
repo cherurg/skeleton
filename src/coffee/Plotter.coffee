@@ -9,6 +9,7 @@ ParametricArray = require './ParametricArray.coffee'
 ParametricArrayPure = require './ParametricArrayPure.coffee'
 Line = require './Line.coffee'
 LinePure = require './LinePure.coffee'
+ShadedArea = require './ShadedArea.coffee'
 Wrap = require './Wrap.coffee'
 
 class Plotter
@@ -57,6 +58,12 @@ class Plotter
     area = new ParametricArray new ParametricArrayPure(array, options), @plot.graph, @plot.x, @plot.y, options
     @elements.addElement area
     return area
+
+  shadedArea: (func, left, right, axe,  options) ->
+    options?.accuaracy ?= @plot.width
+    obj = new ShadedArea new FuncPure(func, options), @plot.graph, @plot.x, @plot.y, options
+    @elements.addElement obj
+    return obj
 
   addLine: (x1, y1, x2, y2, options) ->
     pure = new LinePure(x1, y1, x2, y2, options)
