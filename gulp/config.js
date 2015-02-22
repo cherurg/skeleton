@@ -50,12 +50,12 @@ module.exports = {
   },
   concat: {
     bundles: [{
-      entries: _.map(['ControlSkeleton.js','plot.js'], function (entry) {
-          return dest + "/js/" + entry;
-      }),
+      entries: [dest + "/js/plot.js"],
       name: "SkeletonWithControl.js",
       miniName: "SkeletonWithControl.min.js",
       dest: dest + "/js"
     }]
-  }
+  },
+  src: src,
+  dest: dest
 };

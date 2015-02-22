@@ -11,6 +11,8 @@ class FuncPure
   getLeft: -> @left
   setLeft: (left) -> @left = left
 
+  getFunc: -> @func
+
 FuncPure.defaults =
   left: null
   right: null
