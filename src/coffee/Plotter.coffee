@@ -48,20 +48,51 @@ class Plotter
     @elements.addElement point
     return point
 
+  point: (x, y, options) -> @addPoint(x, y, options)
+
   addFunc: (func, options) ->
     options?.accuaracy ?= @plot.width
     obj = new Func new FuncPure(func, options), @plot.graph, @plot.x, @plot.y, options
     @elements.addElement obj
     return obj
 
+  func: (func, options) -> @addFunc(func, options)
+
   addArea: (array, options) ->
     area = new ParametricArray new ParametricArrayPure(array, options), @plot.graph, @plot.x, @plot.y, options
     @elements.addElement area
     return area
 
-  shadedArea: (func, left, right, axe,  options) ->
+  area: (array, options) -> @addArea(array, options)
+
+  addShadedArea: (func, axe, options) -> @shadedArea(func, axe, options)
+
+  shadedArea: (func, axe = 'ox', options = {}) ->
     options?.accuaracy ?= @plot.width
-    obj = new ShadedArea new FuncPure(func, options), @plot.graph, @plot.x, @plot.y, options
+
+    localOptions = {}
+
+    func = if _.isFunction(func)
+      _.extend localOptions, options
+      func
+
+    else if _.isFunction(func.pure.getFunc())
+      keys = (object) ->
+        _(object)
+        .keys()
+        .difference(ShadedArea::defaults.ownDefaults)
+        .value()
+
+      #возможно, придется две строчки ниже поменять местами
+      _.extend localOptions, _.pick(func, keys(Func::defaults))
+      _.extend localOptions, _.pick(func.pure, keys(FuncPure::defaults))
+
+      func.pure.getFunc()
+
+    else
+      throw new Exception "shadedArea: неверный тип аргумента func. Должен быть Function или Func."
+
+    obj = new ShadedArea new FuncPure(func, localOptions), @plot.graph, @plot.x, @plot.y, localOptions
     @elements.addElement obj
     return obj
 
@@ -91,7 +122,7 @@ class Plotter
 
   getID: -> @id
 
-Plotter.version = "0.0.6"
+Plotter.version = "0.0.7"
 module.exports = Plotter
 
 # делаем Plotter видимым глобально

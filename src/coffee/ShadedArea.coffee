@@ -7,6 +7,7 @@ class ShadedArea extends Func
     def.fill = 1
     def.fillOpacity = 0.3
     def.strokeWidth = 0
+    def.ownDefaults = ['fill', 'fillOpacity', 'strokeWidth']
     def
 
   getPoints: (num) ->
