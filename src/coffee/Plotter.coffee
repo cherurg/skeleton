@@ -65,9 +65,9 @@ class Plotter
 
   area: (array, options) -> @addArea(array, options)
 
-  addShadedArea: (func, axe, options) -> @shadedArea(func, axe, options)
+  addShadedArea: (func, options) -> @shadedArea(func, options)
 
-  shadedArea: (func, axe = 'ox', options = {}) ->
+  shadedArea: (func, options = {}) ->
     options?.accuaracy ?= @plot.width
 
     localOptions = {}
@@ -83,7 +83,6 @@ class Plotter
         .difference(ShadedArea::defaults.ownDefaults)
         .value()
 
-      #возможно, придется две строчки ниже поменять местами
       _.extend localOptions, _.pick(func, keys(Func::defaults))
       _.extend localOptions, _.pick(func.pure, keys(FuncPure::defaults))
 
@@ -102,7 +101,7 @@ class Plotter
     @elements.addElement line
     return line
 
-  addParametricFunc: (functionX, functionY, options = {}) ->
+  #addParametricFunc: (functionX, functionY, options = {}) ->
     ###if _.isArray(functionX) and _.isArray(functionY)
   arrayX = functionX
   arrayY = functionY

@@ -28,7 +28,7 @@
     plotter.addFunc(sin, _.extend(_.clone(style), {
         left: rightSeparator,
         right: leftSeparator,
-        accuracy: 20000,
+        accuracy: 5000,
         breaks: [0]
     }));
 }());
