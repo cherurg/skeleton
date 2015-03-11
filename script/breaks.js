@@ -17,7 +17,7 @@ var f = plotter.addFunc(function (x) {
 
 }, {breaks: breaks, left: -4});
 
-var shade = plotter.shadedArea(function (x) {
+plotter.shadedArea(function (x) {
     for (var i = 0; i < breaks.length; i++) {
         if (x < breaks[i]) {
             return arr[i]
@@ -26,7 +26,7 @@ var shade = plotter.shadedArea(function (x) {
 
     return arr[arr.length - 1];
 
-}, null, null, null, {breaks: breaks, left: -4});
+}, {breaks: breaks, left: -4});
 
 //plotter.remove(f);
 //plotter.draw();
