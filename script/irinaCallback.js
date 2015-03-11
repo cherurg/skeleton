@@ -1,3 +1,5 @@
+//может не работать, если подключена версия без контролов
+
 var container = new PlotContainer("plot");
 var controls = new app.Controls(container.addEmptyDiv());
 

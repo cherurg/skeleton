@@ -1,8 +1,7 @@
 var plotter = new Plotter('plot');
 
 var options = {
-    breaks: [],
-    accuracy: 100
+    breaks: [0]
 };
 
 plotter.addFunc(function (x) {

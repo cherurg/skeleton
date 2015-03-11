@@ -17,10 +17,11 @@ class Line
     .append 'line'
     .classed 'line', true
 
-    @update(linearX, linearY)
-
-  update: (linearX, linearY) ->
     [@linearX, @linearY] = [linearX, linearY] if linearX? and linearY?
+
+    @update()
+
+  update: () ->
     @el
     .attr 'x1', @linearX @pure.x1
     .attr 'x2', @linearX @pure.x2

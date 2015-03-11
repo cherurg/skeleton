@@ -37,18 +37,18 @@ class Point
       # графика. stopPropagation нам в этом помогает.
       d3.event.stopPropagation() if @movable
     .call @drag
-    @update linearX, linearY
-
-  clear: ->
-    @el.remove()
-
-  update: (linearX, linearY) ->
     [@linearX, @linearY] = [linearX, linearY] if linearX? and linearY?
+    @update()
+
+  update: () ->
     @el
     .attr 'cx', @linearX @pure.x
     .attr 'cy' ,@linearY @pure.y
     .attr 'r', @size
     .attr 'fill', @Color()
+
+  clear: ->
+    @el.remove()
 
   setSize: (size) ->
     if _.isNumber size

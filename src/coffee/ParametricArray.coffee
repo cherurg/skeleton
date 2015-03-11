@@ -26,11 +26,10 @@ class ParametricArray
     .append 'path'
     .classed 'Parametric', true
 
-    @update linearX, linearY
-
-  update: (linearX, linearY) ->
     [@linearX, @linearY] = [linearX, linearY] if linearX? and linearY?
+    @update()
 
+  update: () ->
     @el.attr 'd', @path @pure.array
     .attr 'fill', @Fill()
     .attr 'fill-opacity', @fillOpacity

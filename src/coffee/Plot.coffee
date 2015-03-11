@@ -139,7 +139,7 @@ class Plot
 
     @svg.call d3.behavior.zoom().x(@x).y(@y).on("zoom", () => @emitter.emit 'draw')
 
-    console.log @ + " is drawn"
+    #console.log @ + " is drawn"
 
   getGraph: -> @graph
 

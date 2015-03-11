@@ -3,6 +3,7 @@ _ = require 'lodash'
 Colors = require('./Colors.coffee')('Color')
 Colours = require('./Colors.coffee')('Colour', 'color')
 Fill = require('./Colors.coffee')('Fill')
+FuncPure = require './FuncPure.coffee'
 
 class Func
   _.extend(@::, Colors::, Colours::, Fill::)
@@ -37,19 +38,20 @@ class Func
       .classed 'function', true
       @el.push path
       i
-    @update linearX, linearY
+
+    [@linearX, @linearY] = [linearX, linearY] if linearX? and linearY?
+    @update()
 
   clear: ->
     _.each @el, (f) -> f.remove()
 
-  update: (linearX, linearY) ->
-    [@linearX, @linearY] = [linearX, linearY] if linearX? and linearY?
-
+  update: (pointsArray) ->
     [left, right] = [@left(), @right()]
     @currentBreaks = _.filter @breaks, (el) -> left < el < right
 
     for el, i in @el
-      el.attr 'd', @path(@getPoints i)
+      points = if pointsArray? then pointsArray else @getPoints i
+      el.attr 'd', @path(points)
       .attr 'fill', @Fill()
       .attr 'fill-opacity', @fillOpacity
       .attr 'stroke-width', @strokeWidth
@@ -59,8 +61,10 @@ class Func
   # создавая его заново. Смотреть, какие точки остались в
   # окне, а какие вышли за его пределы
   # последнее замечание относится к способу оптимизации.
-  getPoints: (num) ->
+  getPoints: (num, func) ->
     return [] if (@left() >= @right()) or num > @currentBreaks.length
+
+    func = if func? then func else @pure.func
 
     points = []
     domain = @linearX.domain()
@@ -78,12 +82,12 @@ class Func
 
     x = (left // step) * step + step
 
-    points.push x: left, y: @yMax(@pure.func left)
+    points.push x: left, y: @yMax(func left)
     while x <= right
-      y = @pure.func x
+      y = func x
       points.push x: x, y: @yMax(y)
       x += step
-    points.push x: right, y: @yMax(@pure.func right) unless x is right
+    points.push x: right, y: @yMax(func right) unless x is right
 
     return points
 
@@ -102,6 +106,43 @@ class Func
     else if y < -top
       -top
     else y
+
+  ######
+  #options.delay
+  #options.duration
+  #func - Function
+  moveTo: (func, options = {}) ->
+
+    ######
+    # переменные для transition
+    delay = options.delay or 0
+    duration = options.duration or 500
+
+    #Не работает. Есть два варианта:
+    # 1) Вернуться к старой схеме, делать attr('d', ...), но при этом заблокировать зум.
+    # 2) Попробовать использовать attrTween, который будет возвращать новый путь каждый раз
+    for el, i in @el
+      do (i) =>
+        el.transition "transition " + i
+        .delay delay
+        .duration duration
+        .attrTween 'd', =>
+          oldFunc = @pure.func
+          (t) =>
+            #n = do Date.now
+            oldArray = @getPoints(i, oldFunc)
+            newArray = @getPoints(i, func)
+            # or " " нужно на случай, если oldArray и newArray пусты пусты.
+            path = @path(d3.interpolateArray(oldArray, newArray)(t)) or " "
+            #console.log(t, do Date.now - n)
+            path
+
+        .each "end", =>
+          ######
+          #новая чистая функция
+          @pure = new FuncPure(func, @pure)
+
+
 
   getAccuracy: -> @accuracy
   setAccuracy: (accuracy) ->
