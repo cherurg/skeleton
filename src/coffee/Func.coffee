@@ -118,9 +118,6 @@ class Func
     delay = options.delay or 0
     duration = options.duration or 500
 
-    #Не работает. Есть два варианта:
-    # 1) Вернуться к старой схеме, делать attr('d', ...), но при этом заблокировать зум.
-    # 2) Попробовать использовать attrTween, который будет возвращать новый путь каждый раз
     for el, i in @el
       do (i) =>
         el.transition "transition " + i
