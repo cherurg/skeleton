@@ -28,8 +28,7 @@ class Plotter
     .value()
 
     @plot = new Plot @id, new PlotPure(plotPureOptions), plotOptions
-    self = @
-    @plot.emitter.on 'draw', () -> self.draw()
+    @plot.emitter.on 'draw', () => @draw()
 
     @elements = new Wrap()
     @draw()
@@ -100,16 +99,6 @@ class Plotter
     line = new Line(pure, @plot.graph, @plot.x, @plot.y, options)
     @elements.addElement line
     return line
-
-  #addParametricFunc: (functionX, functionY, options = {}) ->
-    ###if _.isArray(functionX) and _.isArray(functionY)
-  arrayX = functionX
-  arrayY = functionY
-  else
-  unless options.step? and options.left? and options.right?
-    console.warn "Не указаны границы или шаг t в options метода addParametricFunc! Взяты значения по-умолчанию."
-
-  [arrayX, arrayY] = ([functionX(t), functionY(t)] for t in [options.left..options.right] by options.step)###
 
   remove: (element) ->
     element = @elements.removeElement element
