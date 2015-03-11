@@ -35,7 +35,7 @@
 
     control = new app.Controls(control);
 
-    control.addRange(function (value) {
+    var range = control.addRange(function (value) {
         leftFunc.moveTo(sin(value), {
             duration: 500
         });
@@ -45,5 +45,8 @@
         middleFunc.moveTo(sin(value), {
             duration: 500
         });
-    }, "$$x^1*\\sin(\\frac{1}{x})$$", 0, 10, 1, 1);
+
+        range.setText("$x^" + value + "*\\sin(\\frac{1}{x})$");
+        //var jax = MathJax.Hub.Queue(["Typeset", MathJax.Hub, range]);
+    }, "$x^1*\\sin(\\frac{1}{x})$", 0, 10, 1, 1);
 }());
