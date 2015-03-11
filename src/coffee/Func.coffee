@@ -120,7 +120,7 @@ class Func
 
     for el, i in @el
       do (i) =>
-        el.transition "transition " + i
+        el.transition "transition " + i + " " + Date.now()
         .delay delay
         .duration duration
         .attrTween 'd', =>
