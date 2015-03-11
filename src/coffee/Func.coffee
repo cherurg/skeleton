@@ -16,14 +16,6 @@ class Func
     fill: 'none'
     fillOpacity: null
 
-  _interpolate: (begin, path) ->
-    return (t) =>
-      if t is 0
-        return begin
-      else
-        @update()
-        return @cachedPath[path]
-
   constructor: (functionPure, graph, linearX, linearY, options = {}) ->
     @pure = functionPure
     _.extend @, @defaults, _.pick(options, _.keys @defaults)
@@ -58,7 +50,8 @@ class Func
     @currentBreaks = _.filter @breaks, (el) -> left < el < right
 
     for el, i in @el
-      el.attr 'd', @path(@getPoints i)
+      points = if pointsArray? then pointsArray else @getPoints i
+      el.attr 'd', @path(points)
       .attr 'fill', @Fill()
       .attr 'fill-opacity', @fillOpacity
       .attr 'stroke-width', @strokeWidth
@@ -68,8 +61,10 @@ class Func
   # создавая его заново. Смотреть, какие точки остались в
   # окне, а какие вышли за его пределы
   # последнее замечание относится к способу оптимизации.
-  getPoints: (num) ->
+  getPoints: (num, func) ->
     return [] if (@left() >= @right()) or num > @currentBreaks.length
+
+    func = if func? then func else @pure.func
 
     points = []
     domain = @linearX.domain()
@@ -87,12 +82,12 @@ class Func
 
     x = (left // step) * step + step
 
-    points.push x: left, y: @yMax(@pure.func left)
+    points.push x: left, y: @yMax(func left)
     while x <= right
-      y = @pure.func x
+      y = func x
       points.push x: x, y: @yMax(y)
       x += step
-    points.push x: right, y: @yMax(@pure.func right) unless x is right
+    points.push x: right, y: @yMax(func right) unless x is right
 
     return points
 
@@ -123,23 +118,30 @@ class Func
     delay = options.delay or 0
     duration = options.duration or 500
 
-    ######
-    #новая чистая функция
-    @pure = new FuncPure(func, @pure)
-    trans = for el, i in @el
+    #Не работает. Есть два варианта:
+    # 1) Вернуться к старой схеме, делать attr('d', ...), но при этом заблокировать зум.
+    # 2) Попробовать использовать attrTween, который будет возвращать новый путь каждый раз
+    for el, i in @el
+      do (i) =>
+        el.transition "transition " + i
+        .delay delay
+        .duration duration
+        .attrTween 'd', =>
+          oldFunc = @pure.func
+          (t) =>
+            #n = do Date.now
+            oldArray = @getPoints(i, oldFunc)
+            newArray = @getPoints(i, func)
+            # or " " нужно на случай, если oldArray и newArray пусты пусты.
+            path = @path(d3.interpolateArray(oldArray, newArray)(t)) or " "
+            #console.log(t, do Date.now - n)
+            path
 
-      ###
-      Нужна своя attrTween функция, которая будет включать в себя интерполятор строк
-      и будет вызывать plot.update каждый раз при обращении к ней. Нужно написать
-      также функцию, которая будет просить прислать новые linearX и linearY.
-      ###
-      path = @path(@getPoints(i))
-      el.transition "transition " + i
-      .delay delay
-      .duration duration
-      .attrTween 'd', (d, num, begin) => @_interpolate(begin, i)
+        .each "end", =>
+          ######
+          #новая чистая функция
+          @pure = new FuncPure(func, @pure)
 
-  #return
 
 
   getAccuracy: -> @accuracy
