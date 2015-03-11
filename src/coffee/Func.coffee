@@ -3,6 +3,7 @@ _ = require 'lodash'
 Colors = require('./Colors.coffee')('Color')
 Colours = require('./Colors.coffee')('Colour', 'color')
 Fill = require('./Colors.coffee')('Fill')
+FuncPure = require './FuncPure.coffee'
 
 class Func
   _.extend(@::, Colors::, Colours::, Fill::)
@@ -14,6 +15,14 @@ class Func
     breaks: []
     fill: 'none'
     fillOpacity: null
+
+  _interpolate: (begin, path) ->
+    return (t) =>
+      if t is 0
+        return begin
+      else
+        @update()
+        return @cachedPath[path]
 
   constructor: (functionPure, graph, linearX, linearY, options = {}) ->
     @pure = functionPure
@@ -37,14 +46,14 @@ class Func
       .classed 'function', true
       @el.push path
       i
-    @update linearX, linearY
+
+    [@linearX, @linearY] = [linearX, linearY] if linearX? and linearY?
+    @update()
 
   clear: ->
     _.each @el, (f) -> f.remove()
 
-  update: (linearX, linearY) ->
-    [@linearX, @linearY] = [linearX, linearY] if linearX? and linearY?
-
+  update: (pointsArray) ->
     [left, right] = [@left(), @right()]
     @currentBreaks = _.filter @breaks, (el) -> left < el < right
 
@@ -102,6 +111,36 @@ class Func
     else if y < -top
       -top
     else y
+
+  ######
+  #options.delay
+  #options.duration
+  #func - Function
+  moveTo: (func, options = {}) ->
+
+    ######
+    # переменные для transition
+    delay = options.delay or 0
+    duration = options.duration or 500
+
+    ######
+    #новая чистая функция
+    @pure = new FuncPure(func, @pure)
+    trans = for el, i in @el
+
+      ###
+      Нужна своя attrTween функция, которая будет включать в себя интерполятор строк
+      и будет вызывать plot.update каждый раз при обращении к ней. Нужно написать
+      также функцию, которая будет просить прислать новые linearX и linearY.
+      ###
+      path = @path(@getPoints(i))
+      el.transition "transition " + i
+      .delay delay
+      .duration duration
+      .attrTween 'd', (d, num, begin) => @_interpolate(begin, i)
+
+  #return
+
 
   getAccuracy: -> @accuracy
   setAccuracy: (accuracy) ->

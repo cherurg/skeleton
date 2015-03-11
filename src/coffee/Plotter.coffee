@@ -38,8 +38,7 @@ class Plotter
 
   draw: ->
     @plot.draw()
-    [linearX, linearY] = [@plot.x, @plot.y]
-    @elements.each (element) -> element.update linearX, linearY
+    @elements.each (element) -> element.update()
 
     return @
 
