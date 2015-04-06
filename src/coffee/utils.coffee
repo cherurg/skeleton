@@ -1,10 +1,6 @@
-copyOptions = (obj, options) ->
-  #перебираем имена всеъ свойств из default и ищем их в options.
-  #если находим, то записываем в свойства @. Если не находим, то берем
-  #значение из default и записываем в @.
-  for value, name of obj.default
-    unless obj.default.hasOwnProperty(value)
-      continue
-    obj[name] = if options?[name]? then options[name] else value
+_ = require 'lodash'
 
-exports.copyOptions = copyOptions
+_.mixin 'extendDefaults': (object, options) ->
+  _.extend object, object.defaults, _.pick(options, _.keys object.defaults)
+
+module.exports = _

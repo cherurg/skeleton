@@ -1,9 +1,25 @@
 d3 = require '../libs/d3/d3.js'
-_ = require 'lodash'
+_ = require './utils.coffee'
 ee = require 'event-emitter'
 
 class Plot
+  defaults:
+    width: 800
+    height: 600
+    stroke: '#000000'
+    vertical: 20
+    horizontal: 30
+    ticks: 10
+    transformX: (d) -> "translate(" + @x(d) + ",0)"
+    transformY: (d) -> "translate(0," + @y(d) + ")"
+    lineWidth: (d) -> if d then "1" else "2"
+    lineColor: (d) -> if d then "#ccc" else "#666"
+    tickNull: (d) -> if Math.abs(d) < 1e-10 then 0 else d
+    onDrawCallback: null
+
   constructor: (elementID, plotPure, options = {}) ->
+    _.extendDefaults(@, options)
+
     # если elementID не определен, то бросаем исключение.
     # Можно ли это сделать более коротким способом?
     unless elementID?
@@ -37,7 +53,7 @@ class Plot
 
     # присвоить классу все свойства из defaults. Если в options будет найдено
     # свойство с уже существующим именем, то оно будет перезаписано
-    _.extend @, Plot.defaults, options
+    _.extendDefaults @, options
 
     @el.html ''
     @svg = @el
@@ -67,6 +83,7 @@ class Plot
     @x = d3.scale.linear()
     .domain [@pure.left, @pure.right]
     .range [0, @width]
+
     @y = d3.scale.linear()
     .domain [@pure.bottom, @pure.top]
     .range _([0, @height]).reverse().value()
@@ -139,21 +156,10 @@ class Plot
 
     @svg.call d3.behavior.zoom().x(@x).y(@y).on("zoom", () => @emitter.emit 'draw')
 
-    #console.log @ + " is drawn"
-
   getGraph: -> @graph
-
-Plot.defaults =
-  width: 800
-  height: 600
-  stroke: '#000000'
-  vertical: 20
-  horizontal: 30
-  ticks: 10
-  transformX: (d) -> "translate(" + @x(d) + ",0)"
-  transformY: (d) -> "translate(0," + @y(d) + ")"
-  lineWidth: (d) -> if d then "1" else "2"
-  lineColor: (d) -> if d then "#ccc" else "#666"
-  tickNull: (d) -> if Math.abs(d) < 1e-10 then 0 else d
+  getLeft: -> @pure.left
+  getRight: -> @pure.right
+  getTop: -> @pure.top
+  getBottom: -> @pure.bottom
 
 module.exports = Plot

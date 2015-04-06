@@ -1,4 +1,4 @@
-_ = require 'lodash'
+_ = require './utils.coffee'
 PlotPure = require './PlotPure.coffee'
 Plot = require './Plot.coffee'
 Point = require './Point.coffee'
@@ -18,17 +18,10 @@ class Plotter
 
     @id = elementID
 
-    #берем стандартные свойства из Plot.defaults и оставляем в plotOptions
-    # только те свойства из options, которые существуют в Plot.defaults
-    plotOptions = _ options
-    .pick _.keys(Plot.defaults)
-    .value()
-    plotPureOptions = _ options
-    .pick _.keys(PlotPure.defaults)
-    .value()
-
-    @plot = new Plot @id, new PlotPure(plotPureOptions), plotOptions
-    @plot.emitter.on 'draw', () => @draw()
+    @plot = new Plot @id, new PlotPure(options), options
+    @plot.emitter.on 'draw', =>
+      @draw()
+      if @plot.onDrawCallback then @plot.onDrawCallback(@plot)
 
     @elements = new Wrap()
     @draw()
