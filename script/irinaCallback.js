@@ -1,7 +1,7 @@
 //может не работать, если подключена версия без контролов
 
 var container = new PlotContainer("plot");
-var controls = new app.Controls(container.addEmptyDiv());
+var controls = new app.Controls(container.addEmptyDiv().attr('id'));
 
 var plot = container.addPlot({left:-10, right:10, top:100, bottom:0, height:400, width:500});
 

@@ -3,7 +3,7 @@ d3 = require '../libs/d3/d3.js'
 Plotter = require './Plotter.coffee'
 _ = require 'lodash'
 $ = require 'jquery'
-require 'jquery-ui'
+#require 'jquery-ui'
 
 class PlotContainer
   constructor: (elementID, options = {}) ->
@@ -27,8 +27,8 @@ class PlotContainer
     .append('div')
     .attr('id', newId)
 
-    return if id then newId else $("#" + newId)
+    if id then newId else $("#" + newId)
 
 module.exports = PlotContainer
 window.PlotContainer = PlotContainer
-window.$ = $
+#window.$ = $
