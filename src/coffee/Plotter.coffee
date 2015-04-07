@@ -11,6 +11,7 @@ Line = require './Line.coffee'
 LinePure = require './LinePure.coffee'
 ShadedArea = require './ShadedArea.coffee'
 Wrap = require './Wrap.coffee'
+ParametricFunc = require './ParametricFunc.coffee'
 
 class Plotter
   constructor: (elementID, options = {}) ->
@@ -85,6 +86,13 @@ class Plotter
     obj = new ShadedArea new FuncPure(func, localOptions), @plot.graph, @plot.x, @plot.y, localOptions
     @elements.addElement obj
     return obj
+
+  parametricFunc: (array, options) ->
+    parametricFunc = new ParametricFunc new ParametricArrayPure(array, options), @plot.graph, @plot.x, @plot.y, options
+    @elements.addElement parametricFunc
+    return parametricFunc
+
+  addParametricFunc: (array, options) -> @parametricFunc(array, options)
 
   addLine: (x1, y1, x2, y2, options) ->
     pure = new LinePure(x1, y1, x2, y2, options)

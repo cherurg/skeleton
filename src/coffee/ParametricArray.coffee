@@ -5,11 +5,17 @@ Colours = require('./Colors.coffee')('Colour', 'color')
 Fill = require('./Colors.coffee')('Fill')
 
 class ParametricArray
+  defaults:
+    color: 20
+    fillOpacity: 0.2
+    strokeWidth: 0
+    fill: 1
+
   _.extend(@::, Colors::, Colours::, Fill::)
 
   constructor: (parametricArrayPure, graph, linearX, linearY, options = {}) ->
     @pure = parametricArrayPure
-    _.extend @, ParametricArray.defaults, _.pick(options, _.keys ParametricArray.defaults)
+    _.extend @, @defaults, _.pick(options, _.keys @defaults)
 
     @draw graph, linearX, linearY
 
@@ -45,11 +51,5 @@ class ParametricArray
   setStrokeWidth: (strokeWidth) -> @strokeWidth = strokeWidth
   getStrokeWidth: -> @strokeWidth
   StrokeWidth: (strokeWidth) -> if strokeWidth? then @setStrokeWidth(strokeWidth) else @getStrokeWidth()
-
-ParametricArray.defaults =
-  color: 20
-  fillOpacity: 0.2
-  strokeWidth: 0
-  fill: 1
 
 module.exports = ParametricArray
