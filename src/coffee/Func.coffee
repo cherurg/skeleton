@@ -126,19 +126,14 @@ class Func
         .attrTween 'd', =>
           oldFunc = @pure.func
           (t) =>
-            #n = do Date.now
             oldArray = @getPoints(i, oldFunc)
             newArray = @getPoints(i, func)
-            # or " " нужно на случай, если oldArray и newArray пусты пусты.
-            path = @path(d3.interpolateArray(oldArray, newArray)(t)) or " "
-            #console.log(t, do Date.now - n)
-            path
+            @path(d3.interpolateArray(oldArray, newArray)(t)) or " "
 
         .each "end", =>
           ######
           #новая чистая функция
           @pure = new FuncPure(func, @pure)
-
 
 
   getAccuracy: -> @accuracy
