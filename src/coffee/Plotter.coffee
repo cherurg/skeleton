@@ -94,7 +94,7 @@ class Plotter
   addParametricFunc: (array, options) -> @parametricFunc(array, options)
 
   addLine: (x1, y1, x2, y2, options) ->
-    pure = new LinePure(x1, y1, x2, y2, options)
+    pure = new LinePure({x1: x1, y1: y1, x2: x2, y2: y2}, options)
     line = new Line(pure, @plot.graph, @plot.x, @plot.y, options)
     @elements.addElement line
     return line
