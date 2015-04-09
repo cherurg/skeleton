@@ -4,6 +4,9 @@ class LinePure
   defaults: {}
 
   constructor: (coordinates, options) ->
+    if arguments.length is 0
+      return
+
     if coordinates.model is 'Line'
       _.extendDefaults(@, coordinates)
       @coordinates = coordinates.coordinates

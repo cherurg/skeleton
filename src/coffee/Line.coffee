@@ -2,6 +2,7 @@ d3 = require '../libs/d3/d3.js'
 _ = require 'lodash'
 Colors = require('./Colors.coffee')('Color')
 Colours = require('./Colors.coffee')('Colour', 'color')
+LinePure = require('./LinePure.coffee')
 
 class Line
   _.extend(@::, Colors::, Colours::)
@@ -12,7 +13,7 @@ class Line
 
   constructor: (linePure, graph, linearX, linearY, options = {}) ->
     if linePure.model is 'Line'
-      @setModel(linePure)
+      @setModel(linePure, silent: true)
     else
       @pure = linePure
       _.extend @, @defaults, _.pick(options, _.keys @defaults)
@@ -63,10 +64,12 @@ class Line
     properties.model = 'Line'
     properties
 
-  setModel: (model) ->
+  setModel: (model, options = {}) ->
     _.extendDefaults(@, model)
+    @pure = new LinePure() unless @pure?
     _.extendDefaults(@pure, model)
     @pure.setCoordinates(model.coordinates)
-    @update()
+    unless options.silent
+      @update()
 
 module.exports = Line
