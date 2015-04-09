@@ -1,4 +1,4 @@
-_ = require 'lodash'
+_ = require './utils.coffee'
 
 class FuncPure
   defaults:
@@ -6,6 +6,11 @@ class FuncPure
     right: null
 
   constructor: (func, options) ->
+    if func.model is 'Func'
+      _.extendDefaults(@, func)
+      @func = func.func
+      return
+
     @func = func
     _.extend @, @defaults, _.pick(options, _.keys @defaults)
 

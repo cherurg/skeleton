@@ -1,5 +1,5 @@
 d3 = require '../libs/d3/d3.js'
-_ = require 'lodash'
+_ = require './utils.coffee'
 Colors = require('./Colors.coffee')('Color')
 Colours = require('./Colors.coffee')('Colour', 'color')
 Fill = require('./Colors.coffee')('Fill')
@@ -17,9 +17,13 @@ class Func
     fillOpacity: null
 
   constructor: (functionPure, graph, linearX, linearY, options = {}) ->
-    @pure = functionPure
-    _.extend @, @defaults, _.pick(options, _.keys @defaults)
-    @breaks = _.sortBy @breaks, (el) -> return el
+
+    if functionPure.model is 'Func'
+      @setModel(functionPure)
+    else
+      @pure = functionPure
+      _.extend @, @defaults, _.pick(options, _.keys @defaults)
+      @breaks = _.sortBy @breaks, (el) -> return el
 
     @draw graph, linearX, linearY
 
@@ -170,5 +174,16 @@ class Func
 
   getPathQuantity: -> @pathQuantity()
   pathQuantity: -> @el.length
+
+  getModel: () ->
+    properties = _.pick(@, _.keys(@defaults))
+    properties = _.extend(properties, _.pick(@pure, _.keys(@pure.defaults)))
+    properties.func = @pure.func
+    properties.model = 'Func'
+    properties
+
+  setModel: (model) ->
+    _.extendDefaults(@, model)
+    @update()
 
 module.exports = Func
