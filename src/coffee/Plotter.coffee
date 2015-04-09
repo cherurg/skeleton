@@ -64,11 +64,11 @@ class Plotter
 
     localOptions = {}
 
-    func = if _.isFunction(func)
+    func = if _.isFunction(func) or func.model is 'Func'
       _.extend localOptions, options
       func
 
-    else if _.isFunction(func.pure.getFunc())
+    else if _.isFunction(func.pure?.getFunc())
       keys = (object) ->
         _(object)
         .keys()
@@ -77,7 +77,6 @@ class Plotter
 
       _.extend localOptions, _.pick(func, keys(Func::defaults))
       _.extend localOptions, _.pick(func.pure, keys(FuncPure::defaults))
-
       func.pure.getFunc()
 
     else
