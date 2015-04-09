@@ -6,9 +6,13 @@ Colours = require('./Colors.coffee')('Colour', 'color')
 class Line
   _.extend(@::, Colors::, Colours::)
 
+  defaults:
+    strokeWidth: 2
+    color: 0
+
   constructor: (linePure, graph, linearX, linearY, options = {}) ->
     @pure = linePure
-    _.extend @, Line.defaults, _.pick(options, _.keys Line.defaults)
+    _.extend @, @defaults, _.pick(options, _.keys @defaults)
 
     @draw graph, linearX, linearY
 
@@ -48,9 +52,5 @@ class Line
   setY2: (y2) -> @pure.y2 = y2
   getY2: -> @pure.y2
   Y2: (y2) -> if y2? then @setY2(y2) else @getY2()
-
-Line.defaults =
-  strokeWidth: 2
-  color: 0
 
 module.exports = Line
