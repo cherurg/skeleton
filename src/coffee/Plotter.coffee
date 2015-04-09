@@ -42,16 +42,23 @@ class Plotter
 
   point: (x, y, options) -> @addPoint(x, y, options)
 
-  addFunc: (func, options) ->
+  addFunc: (func, options = {}) ->
     options?.accuaracy ?= @plot.width
-    obj = new Func new FuncPure(func, options), @plot.graph, @plot.x, @plot.y, options
+    obj = if func.model is 'Func'
+      new Func func, @plot.graph, @plot.x, @plot.y, options
+    else
+      new Func new FuncPure(func, options), @plot.graph, @plot.x, @plot.y, options
     @elements.addElement obj
     return obj
 
   func: (func, options) -> @addFunc(func, options)
 
   addArea: (array, options) ->
-    area = new ParametricArray new ParametricArrayPure(array, options), @plot.graph, @plot.x, @plot.y, options
+    area = if array.model is 'ParametricArray'
+      new ParametricArray array, @plot.graph, @plot.x, @plot.y, options
+    else
+      new ParametricArray new ParametricArrayPure(array, options), @plot.graph, @plot.x, @plot.y, options
+
     @elements.addElement area
     return area
 
@@ -94,7 +101,12 @@ class Plotter
   addParametricFunc: (array, options) -> @parametricFunc(array, options)
 
   addLine: (x1, y1, x2, y2, options) ->
-    pure = new LinePure({x1: x1, y1: y1, x2: x2, y2: y2}, options)
+    pure = if arguments.length is 4 or arguments.length is 5
+      new LinePure({x1: x1, y1: y1, x2: x2, y2: y2}, options)
+
+    else if arguments.length is 1
+      x1
+
     line = new Line(pure, @plot.graph, @plot.x, @plot.y, options)
     @elements.addElement line
     return line

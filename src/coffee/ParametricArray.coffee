@@ -3,6 +3,7 @@ d3 = require '../libs/d3/d3.js'
 Colors = require('./Colors.coffee')('Color')
 Colours = require('./Colors.coffee')('Colour', 'color')
 Fill = require('./Colors.coffee')('Fill')
+ParametricArrayPure = require('./ParametricArrayPure.coffee')
 
 class ParametricArray
   defaults:
@@ -16,7 +17,7 @@ class ParametricArray
   constructor: (parametricArrayPure, graph, linearX, linearY, options = {}) ->
 
     if parametricArrayPure.model is 'ParametricArray'
-      @setModel(parametricArrayPure)
+      @setModel(parametricArrayPure, silent: true)
     else
       @pure = parametricArrayPure
       _.extend @, @defaults, _.pick(options, _.keys @defaults)
@@ -63,10 +64,12 @@ class ParametricArray
     properties.model = 'ParametricArray'
     properties
 
-  setModel: (model) ->
+  setModel: (model, options = {}) ->
     _.extendDefaults(@, model)
+    @pure = new ParametricArrayPure() unless @pure?
     _.extendDefaults(@pure, model)
     @pure.array = model.array
-    @update()
+    unless options.silent
+      @update()
 
 module.exports = ParametricArray

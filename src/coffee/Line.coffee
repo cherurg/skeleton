@@ -11,8 +11,11 @@ class Line
     color: 0
 
   constructor: (linePure, graph, linearX, linearY, options = {}) ->
-    @pure = linePure
-    _.extend @, @defaults, _.pick(options, _.keys @defaults)
+    if linePure.model is 'Line'
+      @setModel(linePure)
+    else
+      @pure = linePure
+      _.extend @, @defaults, _.pick(options, _.keys @defaults)
 
     @draw graph, linearX, linearY
 
@@ -52,5 +55,18 @@ class Line
   setY2: (y2) -> @pure.y2 = y2
   getY2: -> @pure.y2
   Y2: (y2) -> if y2? then @setY2(y2) else @getY2()
+
+  getModel: ->
+    properties = _.pick(@, _.keys(@defaults))
+    properties = _.extend(properties, _.pick(@pure, _.keys(@pure.defaults)))
+    properties.coordinates = @pure.getCoordinates()
+    properties.model = 'Line'
+    properties
+
+  setModel: (model) ->
+    _.extendDefaults(@, model)
+    _.extendDefaults(@pure, model)
+    @pure.setCoordinates(model.coordinates)
+    @update()
 
 module.exports = Line

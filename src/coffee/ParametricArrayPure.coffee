@@ -4,6 +4,9 @@ class ParametricArrayPure
   defaults: {}
 
   constructor: (array, options) ->
+    if arguments.length is 0
+      return
+
     if array.model is 'ParametricArray'
       _.extendDefaults(@, array)
       @array = array.array

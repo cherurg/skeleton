@@ -19,15 +19,12 @@ class Func
   constructor: (functionPure, graph, linearX, linearY, options = {}) ->
 
     if functionPure.model is 'Func'
-      @setModel(functionPure)
+      @setModel(functionPure, {silent: true})
     else
       @pure = functionPure
       _.extend @, @defaults, _.pick(options, _.keys @defaults)
       @breaks = _.sortBy @breaks, (el) -> return el
 
-    @draw graph, linearX, linearY
-
-  draw: (graph, linearX, linearY) ->
     @path = d3.svg.line()
     .x (d) => @linearX d.x
     .y (d) => @linearY d.y
@@ -182,10 +179,12 @@ class Func
     properties.model = 'Func'
     properties
 
-  setModel: (model) ->
+  setModel: (model, options = {}) ->
     _.extendDefaults(@, model)
+    @pure = new FuncPure() unless @pure?
     _.extendDefaults(@pure, model)
     @pure.func = model.func
-    @update()
+    unless options.silent
+      @update()
 
 module.exports = Func
