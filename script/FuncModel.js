@@ -11,4 +11,12 @@ p.removeAll();
 model.left = -3;
 model.right = 1;
 model.func = Math.cos;
-func = p.addFunc(model);
+p.addFunc(model);
+
+p.removeAll();
+
+func = p.addFunc(Math.sin);
+model = func.getModel();
+model = _.cloneDeep(model);
+model.func = Math.cos;
+func.setModel(model);

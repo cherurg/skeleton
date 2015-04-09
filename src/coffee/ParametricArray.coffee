@@ -1,4 +1,4 @@
-_ = require 'lodash'
+_ = require './utils.coffee'
 d3 = require '../libs/d3/d3.js'
 Colors = require('./Colors.coffee')('Color')
 Colours = require('./Colors.coffee')('Colour', 'color')
@@ -14,8 +14,12 @@ class ParametricArray
   _.extend(@::, Colors::, Colours::, Fill::)
 
   constructor: (parametricArrayPure, graph, linearX, linearY, options = {}) ->
-    @pure = parametricArrayPure
-    _.extend @, @defaults, _.pick(options, _.keys @defaults)
+
+    if parametricArrayPure.model is 'ParametricArray'
+      @setModel(parametricArrayPure)
+    else
+      @pure = parametricArrayPure
+      _.extend @, @defaults, _.pick(options, _.keys @defaults)
 
     @draw graph, linearX, linearY
 
@@ -51,5 +55,18 @@ class ParametricArray
   setStrokeWidth: (strokeWidth) -> @strokeWidth = strokeWidth
   getStrokeWidth: -> @strokeWidth
   StrokeWidth: (strokeWidth) -> if strokeWidth? then @setStrokeWidth(strokeWidth) else @getStrokeWidth()
+
+  getModel: ->
+    properties = _.pick(@, _.keys(@defaults))
+    properties = _.extend(properties, _.pick(@pure, _.keys(@pure.defaults)))
+    properties.array = @pure.array
+    properties.model = 'ParametricArray'
+    properties
+
+  setModel: (model) ->
+    _.extendDefaults(@, model)
+    _.extendDefaults(@pure, model)
+    @pure.array = model.array
+    @update()
 
 module.exports = ParametricArray

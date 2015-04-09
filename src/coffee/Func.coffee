@@ -184,6 +184,8 @@ class Func
 
   setModel: (model) ->
     _.extendDefaults(@, model)
+    _.extendDefaults(@pure, model)
+    @pure.func = model.func
     @update()
 
 module.exports = Func
