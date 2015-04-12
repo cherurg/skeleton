@@ -2,14 +2,23 @@ d3 = require '../libs/d3/d3.js'
 _ = require 'lodash'
 Colors = require('./Colors.coffee')('Color')
 Colours = require('./Colors.coffee')('Colour', 'color')
+PointPure = require('./PointPure.coffee')
 
 class Point
   _.extend(@::, Colors::, Colours::)
 
-  constructor: (pointPure, graph, linearX, linearY, options) ->
-    @pure = pointPure
+  defaults:
+    movable: false
+    color: 6 #d62728 - красный
+    size: 3
+    behaviorType: 'free'
 
-    _.extend(@, Point.defaults, options)
+  constructor: (pointPure, graph, linearX, linearY, options) ->
+    if pointPure.model is 'Point'
+      @setModel(pointPure, silent: true)
+    else
+      @pure = pointPure
+      _.extend(@, @defaults, options)
 
     @draw graph, linearX, linearY
 
@@ -73,6 +82,21 @@ class Point
   getMovable: -> @movable
   Movable: (movable) -> if movable? then @setMovable(movable) else @getMovable()
 
+  getModel: ->
+    properties = _.pick(@, _.keys(@defaults))
+    properties = _.extend(properties, _.pick(@pure, _.keys(@pure.defaults)))
+    properties.x = @pure.x
+    properties.y = @pure.y
+    properties.model = 'Point'
+    properties
+
+  setModel: (model, options = {}) ->
+    _.extendDefaults(@, model)
+    @pure = new PointPure() unless @pure?
+    _.extendDefaults(@pure, model)
+    @pure.x = model.x
+    @pure.y = model.y
+    @update() unless options.silent
 ######
 # поведения и их описания
 
@@ -104,11 +128,5 @@ Point.behavior = (type) ->
 
 Point.behaviorTypes =
   'free': Point.freeBehavior
-
-Point.defaults =
-  movable: false
-  color: 6 #d62728 - красный
-  size: 3
-  behaviorType: 'free'
 
 module.exports = Point

@@ -36,7 +36,11 @@ class Plotter
     return @
 
   addPoint: (x, y, options) ->
-    pure = new PointPure(x, y, options)
+    pure = if arguments.length is 3 or arguments.length is 2
+      new PointPure(x, y, options)
+    else if arguments.length is 1
+      x
+
     point = new Point pure, @plot.graph, @plot.x, @plot.y, options
     @elements.addElement point
     return point
