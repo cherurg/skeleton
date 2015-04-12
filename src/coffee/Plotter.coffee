@@ -36,7 +36,8 @@ class Plotter
     return @
 
   addPoint: (x, y, options) ->
-    point = new Point new PointPure(x, y, options), @plot.graph, @plot.x, @plot.y, options
+    pure = new PointPure(x, y, options)
+    point = new Point pure, @plot.graph, @plot.x, @plot.y, options
     @elements.addElement point
     return point
 
@@ -47,7 +48,8 @@ class Plotter
     obj = if func.model is 'Func'
       new Func func, @plot.graph, @plot.x, @plot.y, options
     else
-      new Func new FuncPure(func, options), @plot.graph, @plot.x, @plot.y, options
+      pure = new FuncPure(func, options)
+      new Func pure, @plot.graph, @plot.x, @plot.y, options
     @elements.addElement obj
     return obj
 
@@ -57,7 +59,8 @@ class Plotter
     area = if array.model is 'ParametricArray'
       new ParametricArray array, @plot.graph, @plot.x, @plot.y, options
     else
-      new ParametricArray new ParametricArrayPure(array, options), @plot.graph, @plot.x, @plot.y, options
+      pure = new ParametricArrayPure(array, options)
+      new ParametricArray pure, @plot.graph, @plot.x, @plot.y, options
 
     @elements.addElement area
     return area
@@ -87,14 +90,20 @@ class Plotter
       func.pure.getFunc()
 
     else
-      throw new Exception "shadedArea: неверный тип аргумента func. Должен быть Function или Func."
+      ex = "shadedArea: неверный тип аргумента func."
+      ex += " Должен быть Function или Func."
+      throw new Exception ex
 
-    obj = new ShadedArea new FuncPure(func, localOptions), @plot.graph, @plot.x, @plot.y, localOptions
+    pure = new FuncPure(func, localOptions)
+    obj = new ShadedArea pure, @plot.graph, @plot.x, @plot.y, localOptions
     @elements.addElement obj
     return obj
 
   parametricFunc: (array, options) ->
-    parametricFunc = new ParametricFunc new ParametricArrayPure(array, options), @plot.graph, @plot.x, @plot.y, options
+    pure = new ParametricArrayPure(array, options)
+    parametricFunc = new ParametricFunc pure,
+      @plot.graph, @plot.x, @plot.y, options
+
     @elements.addElement parametricFunc
     return parametricFunc
 
