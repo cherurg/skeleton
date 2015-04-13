@@ -2,9 +2,13 @@ var app = (function () {
     var app = app || {};
 
     app.Controls = function (id) {
-        this.id = id;
+        if (typeof id === 'string') {
+            this.id = id;
+        } else {
+            this.id = id.attr('id');
+        }
         this.table = document.createElement("table");
-        document.getElementById(id).appendChild(this.table);
+        document.getElementById(this.id).appendChild(this.table);
         this._newElem();
 
         this.buttonsNumber = 0;
@@ -28,14 +32,20 @@ var app = (function () {
         this.elem.appendChild(div);
 
         this.buttons = this.buttons || [];
-        this.buttons.push({
+        var obj = {
             number: this.buttonsNumber++,
             button: div
-        });
+        };
+        this.buttons.push(obj);
 
+        var self = this;
         return {
             setText: function (text) {
                 button.innerHTML = text;
+            },
+            remove: function () {
+                _.pull(self.buttons, obj);
+                obj.button.remove();
             }
         }
     };
