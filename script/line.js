@@ -1,6 +1,6 @@
 var plotter = new Plotter("plot", {
-    left: -5,
-    right: 5
+  left: -5,
+  right: 5
 });
 
 plotter.draw();

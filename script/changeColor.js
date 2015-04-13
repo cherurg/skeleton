@@ -1,7 +1,7 @@
 var plotter = new Plotter("plot");
 
 var line = plotter.addLine(0, 0, 1, 1, {
-    color: 7
+  color: 7
 });
 
 var line2 = plotter.addLine(0, 1, 1, 0);

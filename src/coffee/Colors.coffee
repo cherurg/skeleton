@@ -35,7 +35,10 @@ module.exports = (klass, property) ->
   property = klass[0].toLowerCase() + klass.slice(1) unless property?
 
   Colors::['get' + klass] = ->
-    if _.isString @[property] then @[property] else @['set' + klass](@[property])
+    if _.isString @[property]
+      @[property]
+    else
+      @['set' + klass](@[property])
 
   Colors::['set' + klass] = (color) ->
     @[property] = colors(color) if _.isNumber(color)

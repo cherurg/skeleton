@@ -7,16 +7,16 @@ var controls = new app.Controls(container.addEmptyDiv());
 var plot = container.addPlot();
 
 var func = plot.addFunc(function (x) {
-    return x;
+  return x;
 });
 
 
-function changeRange (value) {
-    range.setText(text + value);
-    plot.remove(func);
-    func = plot.addFunc(function (x) {
-        return value*x;
-    });
+function changeRange(value) {
+  range.setText(text + value);
+  plot.remove(func);
+  func = plot.addFunc(function (x) {
+    return value * x;
+  });
 
 }
 

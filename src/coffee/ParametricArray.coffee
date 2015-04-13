@@ -51,11 +51,13 @@ class ParametricArray
 
   setFillOpacity: (opacity) -> @fillOpacity = opacity
   getFillOpacity: -> @fillOpacity
-  Opacity: (opacity) -> if opacity? then @setFillOpacity(opacity) else @getFillOpacity()
+  Opacity: (opacity) ->
+    if opacity? then @setFillOpacity(opacity) else @getFillOpacity()
 
   setStrokeWidth: (strokeWidth) -> @strokeWidth = strokeWidth
   getStrokeWidth: -> @strokeWidth
-  StrokeWidth: (strokeWidth) -> if strokeWidth? then @setStrokeWidth(strokeWidth) else @getStrokeWidth()
+  StrokeWidth: (strokeWidth) ->
+    if strokeWidth? then @setStrokeWidth(strokeWidth) else @getStrokeWidth()
 
   getModel: ->
     properties = _.pick(@, _.keys(@defaults))

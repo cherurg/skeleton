@@ -154,7 +154,8 @@ class Plot
 
     gy.exit().remove()
 
-    @svg.call d3.behavior.zoom().x(@x).y(@y).on("zoom", () => @emitter.emit 'draw')
+    @svg.call d3.behavior.zoom().x(@x).y(@y).on("zoom", () =>
+      @emitter.emit 'draw')
 
   getGraph: -> @graph
   getLeft: -> @pure.left

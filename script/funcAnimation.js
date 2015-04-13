@@ -1,17 +1,17 @@
 (function () {
-    var plot = new Plotter('plot');
+  var plot = new Plotter('plot');
 
-    var func = plot.addFunc(function (x) {
-        return Math.sin(x);
+  var func = plot.addFunc(function (x) {
+    return Math.sin(x);
+  }, {
+    breaks: [0]
+  });
+
+  func
+    .moveTo(function (x) {
+      return 1 / x;
     }, {
-        breaks: [0]
+      delay: 2000,
+      duration: 2000
     });
-
-    func
-        .moveTo(function (x) {
-            return 1/x;
-        }, {
-            delay: 2000,
-            duration: 2000
-        });
 }());

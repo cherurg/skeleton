@@ -1,7 +1,7 @@
 var p = new Plotter('plot');
 
 var func = p.addFunc(Math.sin, {
-    left: -1
+  left: -1
 });
 
 var model = func.getModel();
