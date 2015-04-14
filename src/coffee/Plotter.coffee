@@ -134,6 +134,10 @@ class Plotter
 
   getID: -> @id
 
+  getModel: ->
+
+  setModel: (model) ->
+
 Plotter.version = "0.0.7"
 module.exports = Plotter
 
