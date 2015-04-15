@@ -163,4 +163,8 @@ class Plot
   getTop: -> @pure.top
   getBottom: -> @pure.bottom
 
+  getModel: ->
+
+  setModel: (model ) ->
+
 module.exports = Plot

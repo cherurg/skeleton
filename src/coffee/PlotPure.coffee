@@ -10,7 +10,5 @@ class PlotPure
   constructor: (options) ->
     _.extendDefaults(@, options)
 
-PlotPure.defaults =
-
 
 module.exports = PlotPure
