@@ -16,6 +16,7 @@ class Plot
     lineColor: (d) -> if d then "#ccc" else "#666"
     tickNull: (d) -> if Math.abs(d) < 1e-10 then 0 else d
     onDrawCallback: null
+    zoom: true
 
   constructor: (elementID, plotPure, options = {}) ->
     _.extendDefaults(@, options)
@@ -154,8 +155,9 @@ class Plot
 
     gy.exit().remove()
 
-    @svg.call d3.behavior.zoom().x(@x).y(@y).on("zoom", () =>
-      @emitter.emit 'draw')
+    if @zoom
+      @svg.call d3.behavior.zoom().x(@x).y(@y).on("zoom", () =>
+        @emitter.emit 'draw')
 
   getGraph: -> @graph
   getLeft: -> @pure.left
