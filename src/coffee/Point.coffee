@@ -12,6 +12,7 @@ class Point
     color: 6 #d62728 - красный
     size: 3
     behaviorType: 'free'
+    onMove: null
 
   constructor: (pointPure, graph, linearX, linearY, options) ->
     if pointPure.model is 'Point'
@@ -108,6 +109,8 @@ Point.freeBehavior = ->
   @pure.x = @linearX.invert @el.attr('cx')
   @pure.y = @linearY.invert @el.attr('cy')
 
+  @onMove(@pure.x, @pure.y) if @onMove
+
 Point._behaviorTemplate = (behavior) ->
   =>
     return unless @movable
@@ -121,8 +124,7 @@ Point.behavior = (type) ->
   # в случае, если в рантайме нужно будет поменять поведение, то достаточно
   # будет изменить функцию, вызываемую .on 'drag'
   behaviour = Point.behaviorTypes[type].bind(@)
-  @drag
-  .on 'drag', Point._behaviorTemplate.call(@, behaviour)
+  @drag.on 'drag', Point._behaviorTemplate.call(@, behaviour)
 
   return @drag
 
