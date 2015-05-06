@@ -21,6 +21,8 @@ class Point
       @pure = pointPure
       _.extend(@, @defaults, options)
 
+    if @onMove then @movable = true
+
     @draw graph, linearX, linearY
 
   # аргументы принадлежат типу d3.linear

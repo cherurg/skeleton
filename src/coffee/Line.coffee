@@ -41,19 +41,27 @@ class Line
   clear: ->
     do @el.remove
 
-  setX1: (x1) -> @pure.x1 = x1
+  setX1: (x1) ->
+    @pure.x1 = x1
+    @update()
   getX1: -> @pure.x1
   X1: (x1) -> if x1? then @setX1(x1) else @getX1()
 
-  setX2: (x2) -> @pure.x2 = x2
+  setX2: (x2) ->
+    @pure.x2 = x2
+    @update()
   getX2: -> @pure.x2
   X2: (x2) -> if x2? then @setX2(x2) else @getX2()
 
-  setY1: (y1) -> @pure.y1 = y1
+  setY1: (y1) ->
+    @pure.y1 = y1
+    @update()
   getY1: -> @pure.y1
   Y1: (y1) -> if y1? then @setY1(y1) else @getY1()
 
-  setY2: (y2) -> @pure.y2 = y2
+  setY2: (y2) ->
+    @pure.y2 = y2
+    @update()
   getY2: -> @pure.y2
   Y2: (y2) -> if y2? then @setY2(y2) else @getY2()
 
