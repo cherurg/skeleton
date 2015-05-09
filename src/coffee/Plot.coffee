@@ -1,6 +1,7 @@
 d3 = require '../libs/d3/d3.js'
 _ = require './utils.coffee'
 ee = require 'event-emitter'
+PlotPure = require './PlotPure.coffee'
 
 class Plot
   defaults:
@@ -17,19 +18,33 @@ class Plot
     tickNull: (d) -> if Math.abs(d) < 1e-10 then 0 else d
     onDrawCallback: null
     zoom: true
+    zoomBehaviour: null
 
   constructor: (elementID, plotPure, options = {}) ->
-    _.extendDefaults(@, options)
+    if elementID.model is 'Plot'
+      @setModel(elementID, silent: true)
+    else
+      # если elementID не определен, то бросаем исключение.
+      # Можно ли это сделать более коротким способом?
+      unless elementID?
+        throw  @constructor.name + ": Отсутствует ID элемента для рисования"
 
-    # если elementID не определен, то бросаем исключение.
-    # Можно ли это сделать более коротким способом?
-    unless elementID?
-      throw  @constructor.name + ": Отсутствует ID элемента для рисования"
+      # Проверяем, является ли первый символ решеткой (символ id в html в
+      # нотации селекторов)
+      # если нет, то добавляем решетку.
+      @id = if elementID[0] is "#" then elementID else "#" + elementID
 
-    # Проверяем, является ли первый символ решеткой (символ id в html в
-    # нотации селекторов)
-    # если нет, то добавляем решетку.
-    @id = if elementID[0] is "#" then elementID else "#" + elementID
+      # plot должен быть класса PlotPure.
+      #console.log "plotPure: " + plotPure
+      #console.log "plotPureConstructorName: " + plotPure?.constructor?.name
+      #две строчки выше -- для issue на github
+      unless plotPure? and plotPure?.constructor?.name is "PlotPure"
+        throw @constructor.name + ": Неверный аргумент plot -- " + plotPure
+      @pure = plotPure
+
+      # присвоить классу все свойства из defaults. Если в options будет найдено
+      # свойство с уже существующим именем, то оно будет перезаписано
+      _.extendDefaults @, options
 
     # ищем элемент по указанному ID. Не находим -- ругаемся.
     @el = d3.select @id
@@ -43,18 +58,6 @@ class Plot
     .style '-khtml-user-select', 'none'
     .style '-webkit-user-select', 'none'
     .style 'user-select', 'none'
-
-    # plot должен быть класса PlotPure.
-    #console.log "plotPure: " + plotPure
-    #console.log "plotPureConstructorName: " + plotPure?.constructor?.name
-    #две строчки выше -- для issue на github
-    unless plotPure? and plotPure?.constructor?.name is "PlotPure"
-      throw @constructor.name + ": Неверный аргумент plot -- " + plotPure
-    @pure = plotPure
-
-    # присвоить классу все свойства из defaults. Если в options будет найдено
-    # свойство с уже существующим именем, то оно будет перезаписано
-    _.extendDefaults @, options
 
     @el.html ''
     @svg = @el
@@ -91,6 +94,7 @@ class Plot
 
     @emitter = ee @
 
+  update: -> @draw()
   draw: ->
     ######
     # берем домены по x и y и обновляем по ним свойства.
@@ -156,8 +160,9 @@ class Plot
     gy.exit().remove()
 
     if @zoom
-      @svg.call d3.behavior.zoom().x(@x).y(@y).on("zoom", () =>
-        @emitter.emit 'draw')
+      @zoomBehaviour = d3.behavior.zoom().x(@x).y(@y)
+      @zoomBehaviour.on('zoom', => @emitter.emit('draw'))
+      @svg.call @zoomBehaviour
 
   getGraph: -> @graph
   getLeft: -> @pure.left
@@ -166,7 +171,24 @@ class Plot
   getBottom: -> @pure.bottom
 
   getModel: ->
+    properties = _.pick(@, _.keys(@defaults))
+    properties = _.extend(properties, _.pick(@pure, _.keys(@pure.defaults)))
+    properties.id = @id
+    properties.model = 'Plot'
+    properties
 
-  setModel: (model ) ->
+
+  setModel: (model, options = {}) ->
+    _.extendDefaults(@, model)
+    @pure  = new PlotPure() unless @pure?
+    _.extendDefaults(@pure, model)
+    @id = model.id
+    @y.domain([@pure.bottom, @pure.top])
+    @x.domain([@pure.left, @pure.right])
+    unless options.silent
+      @emitter.emit('draw')
+    #строки 87-95: перенести их инициализацию во внешнюю функцию и вызывать
+    #не только в конструкторе, но и здесь по необходимости.
+
 
 module.exports = Plot
