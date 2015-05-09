@@ -143,4 +143,5 @@ module.exports = Plotter
 
 # делаем Plotter видимым глобально
 window.Plotter = Plotter
+window.Skeleton = Plotter;
 window._ = _;
