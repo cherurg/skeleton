@@ -83,14 +83,9 @@ class Plot
     .attr 'height', @height
     .attr 'viewBox', "0 0 " + @width + " " + @height
 
-    #эти две штуки помогут перевести математически заданные функции в рисунок
-    @x = d3.scale.linear()
-    .domain [@pure.left, @pure.right]
-    .range [0, @width]
+    @initScales()
 
-    @y = d3.scale.linear()
-    .domain [@pure.bottom, @pure.top]
-    .range _([0, @height]).reverse().value()
+    @initZoom()
 
     @emitter = ee @
 
@@ -159,10 +154,24 @@ class Plot
 
     gy.exit().remove()
 
-    if @zoom
-      @zoomBehaviour = d3.behavior.zoom().x(@x).y(@y)
-      @zoomBehaviour.on('zoom', => @emitter.emit('draw'))
-      @svg.call @zoomBehaviour
+  initScales: ->
+    #эти две штуки помогут перевести математически заданные функции в рисунок
+    @x = d3.scale.linear()
+    .domain [@pure.left, @pure.right]
+    .range [0, @width]
+
+    @y = d3.scale.linear()
+    .domain [@pure.bottom, @pure.top]
+    .range [@height, 0]
+
+  #добавить отключение зума во время работы программы
+  initZoom: ->
+    @zoomBehaviour = d3.behavior.zoom().x(@x).y(@y)
+    @zoomBehaviour.on 'zoom', =>
+      return unless @zoom
+      @emitter.emit('draw')
+
+    @svg.call @zoomBehaviour
 
   getGraph: -> @graph
   getLeft: -> @pure.left
@@ -175,16 +184,36 @@ class Plot
     properties = _.extend(properties, _.pick(@pure, _.keys(@pure.defaults)))
     properties.id = @id
     properties.model = 'Plot'
-    properties
+    properties.zoom =
+      translate: @zoomBehaviour.translate()
+      scale: @zoomBehaviour.scale()
 
+    delete properties.lineColor
+    delete properties.lineWidth
+    delete properties.tickNull
+    delete properties.transformX
+    delete properties.transformY
+    delete properties.zoomBehaviour
+    properties
 
   setModel: (model, options = {}) ->
     _.extendDefaults(@, model)
     @pure  = new PlotPure() unless @pure?
     _.extendDefaults(@pure, model)
     @id = model.id
-    @y.domain([@pure.bottom, @pure.top])
-    @x.domain([@pure.left, @pure.right])
+
+    if @x? and @y?
+      @y.domain([@pure.bottom, @pure.top])
+      @x.domain([@pure.left, @pure.right])
+    else
+      @initScales()
+
+    if @zoomBehaviour?
+      @zoomBehaviour.translate(model.zoom.translate)
+      @zoomBehaviour.scale(model.zoom.scale)
+    else
+      @initZoom()
+
     unless options.silent
       @emitter.emit('draw')
     #строки 87-95: перенести их инициализацию во внешнюю функцию и вызывать
