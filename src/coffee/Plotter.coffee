@@ -12,7 +12,8 @@ LinePure = require './LinePure.coffee'
 ShadedArea = require './ShadedArea.coffee'
 Wrap = require './Wrap.coffee'
 ParametricFunc = require './ParametricFunc.coffee'
-Gate = require './Gate.coffee'
+ee = require 'event-emitter'
+OverContainer = require './OverContainer.coffee'
 
 class Plotter
   constructor: (elementID, options = communicate: true) ->
@@ -22,7 +23,7 @@ class Plotter
 
     @id = elementID
 
-    @gate = new Gate @
+    @emitter = ee @
 
     @plot = new Plot @id, new PlotPure(options), options
     @plot.emitter.on 'draw', =>
@@ -30,6 +31,10 @@ class Plotter
       if @plot.onDrawCallback then @plot.onDrawCallback(@plot)
 
     @elements = new Wrap()
+
+    if window.overContainer?
+      window.overContainer.add @
+
     @draw()
 
   update: -> @draw()
@@ -37,7 +42,7 @@ class Plotter
   draw: ->
     @plot.draw()
     @elements.each (element) -> element.update()
-    if @communicate then @gate.send()
+    if @communicate then @emitter.emit('drawn')
 
     return @
 
@@ -170,3 +175,5 @@ module.exports = Plotter
 window.Plotter = Plotter
 window.Skeleton = Plotter;
 window._ = _;
+
+window.OverContainer = OverContainer

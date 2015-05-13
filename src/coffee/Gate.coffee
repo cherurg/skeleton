@@ -2,16 +2,16 @@ config = require './NetConfig.coffee'
 socket = require('socket.io-client')(config.host)
 
 class Gate
-  constructor: (skeleton) ->
-    @skeleton = skeleton
-    if @skeleton.type is 'receiver'
+  constructor: (overContainer) ->
+    @container = overContainer
+    if @container.type is 'receiver'
       socket.on 'data', @receive.bind(@)
 
   send: ->
-    return unless @skeleton.type is 'sender'
-    socket.emit 'data', @skeleton.getModel()
+    return unless @container.type is 'sender'
+    socket.emit 'data', @container.getModel()
 
   receive: (model) ->
-    @skeleton.setModel(model)
+    @container.setModel(model)
 
 module.exports = Gate;
