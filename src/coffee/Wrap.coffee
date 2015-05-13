@@ -41,4 +41,6 @@ class Wrap
     @arr = []
     @number = 0
 
+  empty: -> @arr.length is 0
+
 module.exports = Wrap

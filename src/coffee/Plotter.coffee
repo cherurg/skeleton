@@ -12,12 +12,17 @@ LinePure = require './LinePure.coffee'
 ShadedArea = require './ShadedArea.coffee'
 Wrap = require './Wrap.coffee'
 ParametricFunc = require './ParametricFunc.coffee'
+Gate = require './Gate.coffee'
 
 class Plotter
-  constructor: (elementID, options = {}) ->
+  constructor: (elementID, options = communicate: true) ->
     _.extend(@, options)
 
+    @type = Plotter.type
+
     @id = elementID
+
+    @gate = new Gate @
 
     @plot = new Plot @id, new PlotPure(options), options
     @plot.emitter.on 'draw', =>
@@ -27,11 +32,12 @@ class Plotter
     @elements = new Wrap()
     @draw()
 
+  update: -> @draw()
   redraw: -> @draw()
-
   draw: ->
     @plot.draw()
     @elements.each (element) -> element.update()
+    if @communicate then @gate.send()
 
     return @
 
@@ -135,10 +141,29 @@ class Plotter
   getID: -> @id
 
   getModel: ->
+    properties =
+      plot: @plot.getModel()
+      elements: []
+
+    @elements.each (el) =>
+      properties.elements.push el.getModel()
+
+    properties
 
   setModel: (model) ->
+    @plot.setModel(model.plot, silent: true)
 
-Plotter.version = "0.0.7"
+    unless @elements.empty()
+      @elements.each (el, i) =>
+        el.setModel(model.elements[i], silent: true)
+    else
+      model.elements.forEach (el) =>
+          this[el.model](el)
+
+    @update()
+
+Plotter.version = "0.1.0"
+Plotter.type = null
 module.exports = Plotter
 
 # делаем Plotter видимым глобально
