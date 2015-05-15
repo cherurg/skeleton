@@ -3,8 +3,9 @@ ee = require 'event-emitter'
 Gate = require './Gate.coffee'
 
 class OverContainer extends Wrap
-  constructor: ->
+  constructor: (type) ->
     super()
+    @type = type
     @gate = new Gate @
 
   getModel: ->
@@ -16,6 +17,8 @@ class OverContainer extends Wrap
 
   add: (el) ->
     Wrap::add.call(@, el)
-    el.emitter.on 'drawn', => @gate.send()
+    el.emitter.on 'drawn', =>
+      if overContainer.type is 'sender'
+        @gate.send()
 
 module.exports = OverContainer

@@ -10,7 +10,10 @@
 <script src="dist/js/SkeletonWithControl.js"></script>
 <script src="src/OverContainerManager.js"></script>
 <script>
-  Plotter.type = 'receiver';
+  (function () {
+    var overContainer = new OverContainer('receiver');
+    window.overContainer = overContainer;
+  }());
 </script>
 <script src="script/line%20depended%20from%20points.js"></script>
 </body>
