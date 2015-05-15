@@ -9,16 +9,17 @@ class Wrap
   removeElement: (el) -> @remove el
 
   add: (el) ->
-    @arr.push el: el, number: @number++
+    @arr.push el
     return _.last @arr
 
   remove: (el) ->
     # аргумент может быть как номером, так и самим объектом для удаления
     # Что бы это ни было, нужно найти это в массиве и удалить.
     if _.isNumber el
-      finder = (o) -> o.number is el
-    else if el?.constructor?
-      finder = (o) -> o.el is el
+      number = el
+      finder = (o, i) -> i is number
+    else if el.constructor?
+      finder = (o) -> o is el
 
     #достаем смертинка из массива
     dead = _.find @arr, finder
@@ -33,8 +34,7 @@ class Wrap
     return dead.el
 
   each: (func) ->
-    arr = _.map @arr, (o) -> o.el
-    _.each arr, func
+    @arr.forEach(func)
 
   init: -> @removeAll()
   removeAll: ->

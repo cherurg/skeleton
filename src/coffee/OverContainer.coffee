@@ -9,11 +9,11 @@ class OverContainer extends Wrap
     @gate = new Gate @
 
   getModel: ->
-    @arr.map (el) -> el.el.getModel()
+    @arr.map (el) -> el.getModel()
 
   setModel: (modelContainer) ->
     modelContainer.forEach (model, i) =>
-      @arr[i].el.setModel(model)
+      @arr[i].setModel(model)
 
   add: (el) ->
     Wrap::add.call(@, el)
