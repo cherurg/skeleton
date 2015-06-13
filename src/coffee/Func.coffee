@@ -183,7 +183,7 @@ class Func
     _.extendDefaults(@, model)
     @pure = new FuncPure() unless @pure?
     _.extendDefaults(@pure, model)
-    @pure.func = model.func
+    #@pure.func = model.func
     unless options.silent
       @update()
 

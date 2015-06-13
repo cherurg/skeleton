@@ -16,8 +16,10 @@ ee = require 'event-emitter'
 OverContainer = require './OverContainer.coffee'
 
 class Plotter
-  constructor: (elementID, options = communicate: true) ->
+  constructor: (elementID, options) ->
     _.extend(@, options)
+    if @communicate isnt false
+      @communicate = true
 
     @type = Plotter.type
 

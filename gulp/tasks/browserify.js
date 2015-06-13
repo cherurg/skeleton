@@ -28,9 +28,9 @@ gulp.task('browserify', function(callback) {
       // Specify the entry point of your app
       entries: bundleConfig.entries,
       // Add file extentions to make optional in your requires
-      extensions: config.extensions,
+      extensions: config.extensions/*,
       // Enable source maps!
-      debug: config.debug
+      debug: config.debug*/
     });
 
     var bundle = function() {
