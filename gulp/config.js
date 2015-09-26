@@ -30,7 +30,7 @@ module.exports = {
     dest: dest
   },
   coffee: {
-    src: src + "/coffee/**"
+    src: src + "/js/**"
   },
   browserify: {
     // Enable source maps
@@ -40,7 +40,7 @@ module.exports = {
     // A separate bundle will be generated for each
     // bundle config in the list below
     bundleConfigs: [{
-      entries: src + '/coffee/PlotContainer.coffee',
+      entries: src + '/js/PlotContainer.coffee',
       dest: dest + '/js',
       outputName: 'plot.js'
     }]

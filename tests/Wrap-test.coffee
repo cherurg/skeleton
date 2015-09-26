@@ -1,6 +1,6 @@
 mocha = require 'mocha'
 should = require 'should'
-Wrap = require '../src/coffee/Wrap.coffee'
+Wrap = require './Wrap.coffee'
 _ = require 'lodash'
 
 
