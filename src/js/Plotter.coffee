@@ -37,7 +37,7 @@ class Plotter
 
   addPoint: (x, y, options) ->
     point = new Point new PointPure(x, y, options), @plot.graph, @plot.x, @plot.y, options
-    @elements.addElement point
+    @elements.add point
     return point
 
   point: (x, y, options) -> @addPoint(x, y, options)
@@ -45,14 +45,14 @@ class Plotter
   addFunc: (func, options) ->
     options?.accuaracy ?= @plot.width
     obj = new Func new FuncPure(func, options), @plot.graph, @plot.x, @plot.y, options
-    @elements.addElement obj
+    @elements.add obj
     return obj
 
   func: (func, options) -> @addFunc(func, options)
 
   addArea: (array, options) ->
     area = new ParametricArray new ParametricArrayPure(array, options), @plot.graph, @plot.x, @plot.y, options
-    @elements.addElement area
+    @elements.add area
     return area
 
   area: (array, options) -> @addArea(array, options)
@@ -83,12 +83,12 @@ class Plotter
       throw new Exception "shadedArea: неверный тип аргумента func. Должен быть Function или Func."
 
     obj = new ShadedArea new FuncPure(func, localOptions), @plot.graph, @plot.x, @plot.y, localOptions
-    @elements.addElement obj
+    @elements.add obj
     return obj
 
   parametricFunc: (array, options) ->
     parametricFunc = new ParametricFunc new ParametricArrayPure(array, options), @plot.graph, @plot.x, @plot.y, options
-    @elements.addElement parametricFunc
+    @elements.add parametricFunc
     return parametricFunc
 
   addParametricFunc: (array, options) -> @parametricFunc(array, options)
@@ -96,11 +96,11 @@ class Plotter
   addLine: (x1, y1, x2, y2, options) ->
     pure = new LinePure(x1, y1, x2, y2, options)
     line = new Line(pure, @plot.graph, @plot.x, @plot.y, options)
-    @elements.addElement line
+    @elements.add line
     return line
 
   remove: (element) ->
-    element = @elements.removeElement element
+    element = @elements.remove element
     element.clear()
 
   removeAll: ->

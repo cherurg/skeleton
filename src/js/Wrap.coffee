@@ -4,10 +4,6 @@ class Wrap
   constructor: ->
     @init()
 
-  #устаревшие методы
-  addElement: (el) -> @add el
-  removeElement: (el) -> @remove el
-
   add: (el) ->
     @arr.push el: el, number: @number++
     return _.last @arr
