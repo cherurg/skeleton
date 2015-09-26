@@ -9,7 +9,8 @@ plotter.addFunc(function (x) {
 }, options);
 
 var setTop = setTimeout(function () {
-  plotter.plot.y.domain([plotter.plot.pure.bottom, 10]);
+  var plot = plotter.getPlot();
+  plot.setTop(10);
   plotter.draw();
 }, 2000);
 
