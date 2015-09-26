@@ -1,6 +1,6 @@
 mocha = require 'mocha'
 should = require 'should'
-PlotPure = require './PlotPure.coffee'
+PlotPure = require '../src/js/PlotPure.coffee'
 #Plot = require '../src/coffee/Plot.coffee'
 
 
