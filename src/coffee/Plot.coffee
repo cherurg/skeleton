@@ -4,6 +4,7 @@ ee = require 'event-emitter'
 
 class Plot
   defaults:
+    zoom: true
     width: 800
     height: 600
     stroke: '#000000'
@@ -154,7 +155,8 @@ class Plot
 
     gy.exit().remove()
 
-    @svg.call d3.behavior.zoom().x(@x).y(@y).on("zoom", () => @emitter.emit 'draw')
+    if @zoom
+      @svg.call d3.behavior.zoom().x(@x).y(@y).on("zoom", () => @emitter.emit 'draw')
 
   getGraph: -> @graph
   getLeft: -> @pure.left
