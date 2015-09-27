@@ -55,7 +55,7 @@ class Plotter
       x
 
     point = new Point pure, @plot.graph, @plot.x, @plot.y, options
-    @elements.addElement point
+    @elements.add point
 
     return point
 
@@ -68,7 +68,7 @@ class Plotter
     else
       pure = new FuncPure(func, options)
       new Func pure, @plot.graph, @plot.x, @plot.y, options
-    @elements.addElement obj
+    @elements.add obj
     return obj
 
   func: (func, options) -> @addFunc(func, options)
@@ -80,7 +80,7 @@ class Plotter
       pure = new ParametricArrayPure(array, options)
       new ParametricArray pure, @plot.graph, @plot.x, @plot.y, options
 
-    @elements.addElement area
+    @elements.add area
     return area
 
   area: (array, options) -> @addArea(array, options)
@@ -114,7 +114,7 @@ class Plotter
 
     pure = new FuncPure(func, localOptions)
     obj = new ShadedArea pure, @plot.graph, @plot.x, @plot.y, localOptions
-    @elements.addElement obj
+    @elements.add obj
     return obj
 
   parametricFunc: (array, options) ->
@@ -122,7 +122,7 @@ class Plotter
     parametricFunc = new ParametricFunc pure,
       @plot.graph, @plot.x, @plot.y, options
 
-    @elements.addElement parametricFunc
+    @elements.add parametricFunc
     return parametricFunc
 
   addParametricFunc: (array, options) -> @parametricFunc(array, options)
