@@ -56,6 +56,7 @@ class Plotter
 
     point = new Point pure, @plot.graph, @plot.x, @plot.y, options
     @elements.addElement point
+
     return point
 
   point: (x, y, options) -> @addPoint(x, y, options)
@@ -134,11 +135,11 @@ class Plotter
       x1
 
     line = new Line(pure, @plot.graph, @plot.x, @plot.y, options)
-    @elements.addElement line
+    @elements.add line
     return line
 
   remove: (element) ->
-    element = @elements.removeElement element
+    element = @elements.remove element
     element.clear()
 
   removeAll: ->
@@ -169,8 +170,11 @@ class Plotter
 
     @update()
 
+  getPlot: -> @plot
+
 Plotter.version = "0.1.0"
 Plotter.type = null
+
 module.exports = Plotter
 
 # делаем Plotter видимым глобально

@@ -5,6 +5,7 @@ PlotPure = require './PlotPure.coffee'
 
 class Plot
   defaults:
+    zoom: true
     width: 800
     height: 600
     stroke: '#000000'
@@ -172,6 +173,25 @@ class Plot
       @emitter.emit('draw')
 
     @svg.call @zoomBehaviour
+
+    if @zoom
+      @svg.call d3.behavior.zoom().x(@x).y(@y).on("zoom", () => @emitter.emit 'draw')
+
+  setLeft: (left) ->
+    @x.domain([left, @x.domain()[1]])
+
+  setRight: (right) ->
+    @x.domain([@x.domain()[0], right])
+
+  setBottom: (bottom) ->
+    @y.domain([bottom, @y.domain()[1]])
+
+  setTop: (top) ->
+    @y.domain([@y.domain()[0], top])
+
+  setBorders: (left, right, bottom, top) ->
+    @x.domain([left, right])
+    @y.domain([bottom, top])
 
   getGraph: -> @graph
   getLeft: -> @pure.left
