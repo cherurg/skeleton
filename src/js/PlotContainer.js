@@ -2,7 +2,7 @@ import d3 from '../libs/d3/d3';
 import {extend, clone} from 'lodash';
 
 import Wrap from './Wrap.coffee';
-import Plotter from './Plotter.coffee';
+import Plotter from './Plotter';
 
 class PlotContainer {
   constructor(elementID, options = {}) {

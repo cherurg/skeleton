@@ -172,14 +172,13 @@ class Plotter
 
   getPlot: -> @plot
 
-Plotter.version = "0.1.0"
+Plotter.version = "0.2.0"
 Plotter.type = null
 
 module.exports = Plotter
 
 # делаем Plotter видимым глобально
 window.Plotter = Plotter
-window.Skeleton = Plotter;
 window._ = _;
 
 window.OverContainer = OverContainer
