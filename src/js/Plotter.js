@@ -261,7 +261,7 @@ class Plotter {
   }
 }
 
-Plotter.version = "0.2.0";
+Plotter.version = '0.2.1';
 Plotter.type = null;
 
 window.Plotter = Plotter;
