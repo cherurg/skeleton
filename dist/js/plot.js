@@ -9632,6 +9632,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function getType() {
 	      return this.type;
 	    }
+	  }, {
+	    key: 'getGate',
+	    value: function getGate() {
+	      return this.gate;
+	    }
 	  }]);
 
 	  return OverContainer;
@@ -9666,6 +9671,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  Gate.prototype.receive = function(model) {
 	    return this.container.setModel(model);
+	  };
+
+	  Gate.prototype.getSocket = function() {
+	    return socket;
 	  };
 
 	  return Gate;

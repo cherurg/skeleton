@@ -34,6 +34,10 @@ class OverContainer extends Wrap {
   getType() {
     return this.type;
   }
+
+  getGate() {
+    return this.gate;
+  }
 }
 
 export default OverContainer;

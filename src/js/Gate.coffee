@@ -14,4 +14,6 @@ class Gate
   receive: (model) ->
     @container.setModel(model)
 
+  getSocket: () -> socket
+
 module.exports = Gate;
