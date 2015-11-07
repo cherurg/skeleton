@@ -3,6 +3,7 @@ import {extend, clone} from 'lodash';
 
 import Wrap from './Wrap.coffee';
 import Plotter from './Plotter';
+import OverContainer from './OverContainer';
 
 class PlotContainer {
   constructor(elementID, options = {}) {
@@ -50,5 +51,6 @@ class PlotContainer {
 }
 
 window.PlotContainer = PlotContainer;
+window.OverContainer = OverContainer;
 export {PlotContainer};
 export {Plotter};

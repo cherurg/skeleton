@@ -80,6 +80,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Plotter2 = _interopRequireDefault(_Plotter);
 
+	var _OverContainer = __webpack_require__(35);
+
+	var _OverContainer2 = _interopRequireDefault(_OverContainer);
+
 	var PlotContainer = (function () {
 	  function PlotContainer(elementID) {
 	    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -138,6 +142,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 
 	window.PlotContainer = PlotContainer;
+	window.OverContainer = _OverContainer2['default'];
 	exports.PlotContainer = PlotContainer;
 	exports.Plotter = _Plotter2['default'];
 
@@ -7467,10 +7472,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _eventEmitter2 = _interopRequireDefault(_eventEmitter);
 
-	var _OverContainerCoffee = __webpack_require__(35);
-
-	var _OverContainerCoffee2 = _interopRequireDefault(_OverContainerCoffee);
-
 	var Plotter = (function () {
 	  function Plotter(elementID, options) {
 	    var _this = this;
@@ -7716,8 +7717,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	window.Plotter = Plotter;
 	window._ = _;
-
-	window.OverContainer = _OverContainerCoffee2['default'];
 
 	exports['default'] = Plotter;
 	module.exports = exports['default'];
@@ -9555,56 +9554,85 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Gate, OverContainer, Wrap, ee,
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty;
+	'use strict';
 
-	Wrap = __webpack_require__(4);
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
 
-	ee = __webpack_require__(9);
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	Gate = __webpack_require__(36);
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-	OverContainer = (function(superClass) {
-	  extend(OverContainer, superClass);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _WrapCoffee = __webpack_require__(4);
+
+	var _WrapCoffee2 = _interopRequireDefault(_WrapCoffee);
+
+	var _eventEmitter = __webpack_require__(9);
+
+	var _eventEmitter2 = _interopRequireDefault(_eventEmitter);
+
+	var _GateCoffee = __webpack_require__(36);
+
+	var _GateCoffee2 = _interopRequireDefault(_GateCoffee);
+
+	var OverContainer = (function (_Wrap) {
+	  _inherits(OverContainer, _Wrap);
 
 	  function OverContainer(type) {
-	    OverContainer.__super__.constructor.call(this);
+	    _classCallCheck(this, OverContainer);
+
+	    _get(Object.getPrototypeOf(OverContainer.prototype), 'constructor', this).call(this);
 	    this.type = type;
-	    this.gate = new Gate(this);
+	    this.gate = new _GateCoffee2['default'](this);
 	  }
 
-	  OverContainer.prototype.getModel = function() {
-	    return this.arr.map(function(el) {
-	      return el.getModel();
-	    });
-	  };
+	  _createClass(OverContainer, [{
+	    key: 'getModel',
+	    value: function getModel() {
+	      this.arr.map(function (item) {
+	        return item.getModel();
+	      });
+	    }
+	  }, {
+	    key: 'setModel',
+	    value: function setModel(modelContainer) {
+	      var _this = this;
 
-	  OverContainer.prototype.setModel = function(modelContainer) {
-	    return modelContainer.forEach((function(_this) {
-	      return function(model, i) {
-	        return _this.arr[i].setModel(model);
-	      };
-	    })(this));
-	  };
+	      modelContainer.forEach(function (model, i) {
+	        _this.arr[i].setModel(model);
+	      });
+	    }
+	  }, {
+	    key: 'add',
+	    value: function add(el) {
+	      var _this2 = this;
 
-	  OverContainer.prototype.add = function(el) {
-	    Wrap.prototype.add.call(this, el);
-	    return el.emitter.on('drawn', (function(_this) {
-	      return function() {
+	      _WrapCoffee2['default'].prototype.add.call(this, el);
+	      el.emitter.on('drawn', function () {
 	        if (overContainer.type === 'sender') {
-	          return _this.gate.send();
+	          _this2.gate.send();
 	        }
-	      };
-	    })(this));
-	  };
+	      });
+	    }
+	  }, {
+	    key: 'getType',
+	    value: function getType() {
+	      return this.type;
+	    }
+	  }]);
 
 	  return OverContainer;
+	})(_WrapCoffee2['default']);
 
-	})(Wrap);
-
-	module.exports = OverContainer;
-
+	exports['default'] = OverContainer;
+	module.exports = exports['default'];
 
 /***/ },
 /* 36 */

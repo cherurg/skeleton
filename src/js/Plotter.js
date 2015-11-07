@@ -13,7 +13,6 @@ import ShadedArea from './ShadedArea.coffee';
 import Wrap from './Wrap.coffee';
 import ParametricFunc from './ParametricFunc.coffee';
 import ee from 'event-emitter';
-import OverContainer from './OverContainer.coffee';
 
 class Plotter {
   constructor(elementID, options) {
@@ -159,8 +158,8 @@ class Plotter {
       pureFunc = func.pure.getFunc();
 
     } else {
-      let ex = 'shadedArea: неверный тип аргумента func.';
-      ex += ' Должен быть Function или Func.';
+      let ex = 'shadedArea: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ func.';
+      ex += ' пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ Function пїЅпїЅпїЅ Func.';
       throw new Exception(ex);
     }
 
@@ -266,7 +265,5 @@ Plotter.type = null;
 
 window.Plotter = Plotter;
 window._ = _;
-
-window.OverContainer = OverContainer;
 
 export default Plotter;
