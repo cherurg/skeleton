@@ -2,6 +2,9 @@ import Wrap from './Wrap.coffee';
 import ee from 'event-emitter';
 import Gate from './Gate.coffee';
 
+export const SENDER = 'sender';
+export const RECEIVER = 'receiver';
+
 class OverContainer extends Wrap {
   constructor(type) {
     super();
@@ -22,7 +25,7 @@ class OverContainer extends Wrap {
   add(el) {
     Wrap.prototype.add.call(this, el);
     el.emitter.on('drawn', () => {
-      if (overContainer.type === 'sender') {
+      if (overContainer.type === SENDER) {
         this.gate.send();
       }
     });

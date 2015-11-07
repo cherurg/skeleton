@@ -9582,6 +9582,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _GateCoffee2 = _interopRequireDefault(_GateCoffee);
 
+	var SENDER = 'sender';
+	exports.SENDER = SENDER;
+	var RECEIVER = 'receiver';
+
+	exports.RECEIVER = RECEIVER;
+
 	var OverContainer = (function (_Wrap) {
 	  _inherits(OverContainer, _Wrap);
 
@@ -9616,7 +9622,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      _WrapCoffee2['default'].prototype.add.call(this, el);
 	      el.emitter.on('drawn', function () {
-	        if (overContainer.type === 'sender') {
+	        if (overContainer.type === SENDER) {
 	          _this2.gate.send();
 	        }
 	      });
@@ -9632,7 +9638,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(_WrapCoffee2['default']);
 
 	exports['default'] = OverContainer;
-	module.exports = exports['default'];
 
 /***/ },
 /* 36 */
