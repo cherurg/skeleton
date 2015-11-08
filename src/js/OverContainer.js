@@ -2,10 +2,10 @@ import Wrap from './Wrap.coffee';
 import ee from 'event-emitter';
 import Gate from './Gate.coffee';
 
-export const SENDER = 'sender';
-export const RECEIVER = 'receiver';
-
 class OverContainer extends Wrap {
+  static SENDER = 'sender';
+  static RECEIVER = 'receiver';
+
   constructor(type) {
     super();
     this.type = type;
@@ -13,19 +13,19 @@ class OverContainer extends Wrap {
   }
 
   getModel() {
-    this.arr.map(item => item.getModel());
+    return this.arr.map(item => item.getModel());
   }
 
   setModel(modelContainer) {
-    modelContainer.forEach((model, i) => {
+    return modelContainer.forEach((model, i) => {
       this.arr[i].setModel(model);
     });
   }
 
   add(el) {
     Wrap.prototype.add.call(this, el);
-    el.emitter.on('drawn', () => {
-      if (overContainer.type === SENDER) {
+    return el.emitter.on('drawn', () => {
+      if (overContainer.type === OverContainer.SENDER) {
         this.gate.send();
       }
     });
