@@ -17,6 +17,9 @@ var options = {
   bottom: -a
 };
 
-sun.addFunc(function (x) {
-  return Math.sqrt((1 - Math.pow(x - 1, 2) / Math.pow(a, 2)) * Math.pow(a, 2));
-}, options);
+sun.addPoint(1, 1);
+sun.addPoint(2, 2);
+
+setTimeout(function () {
+  sun.removeAll();
+}, 1000);

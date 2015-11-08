@@ -27,7 +27,7 @@ class Wrap
     # удаляем смертника
     _.remove @arr, (o) -> o is dead
 
-    return dead.el
+    return dead
 
   each: (func) ->
     @arr.forEach(func)

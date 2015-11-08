@@ -7371,7 +7371,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _.remove(this.arr, function(o) {
 	      return o === dead;
 	    });
-	    return dead.el;
+	    return dead;
 	  };
 
 	  Wrap.prototype.each = function(func) {
@@ -7497,9 +7497,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.elements = new _WrapCoffee2['default']();
 
-	    if (window.overContainer !== null && window.overContainer !== undefined) {
-	      window.overContainer.add(this);
-	    }
+	    setTimeout(function () {
+	      if (window.overContainer !== null && window.overContainer !== undefined) {
+	        window.overContainer.add(_this);
+	      }
+	    }, 0);
 
 	    this.draw();
 	  }
@@ -9582,14 +9584,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _GateCoffee2 = _interopRequireDefault(_GateCoffee);
 
-	var SENDER = 'sender';
-	exports.SENDER = SENDER;
-	var RECEIVER = 'receiver';
-
-	exports.RECEIVER = RECEIVER;
-
 	var OverContainer = (function (_Wrap) {
 	  _inherits(OverContainer, _Wrap);
+
+	  _createClass(OverContainer, null, [{
+	    key: 'SENDER',
+	    value: 'sender',
+	    enumerable: true
+	  }, {
+	    key: 'RECEIVER',
+	    value: 'receiver',
+	    enumerable: true
+	  }]);
 
 	  function OverContainer(type) {
 	    _classCallCheck(this, OverContainer);
@@ -9602,7 +9608,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(OverContainer, [{
 	    key: 'getModel',
 	    value: function getModel() {
-	      this.arr.map(function (item) {
+	      return this.arr.map(function (item) {
 	        return item.getModel();
 	      });
 	    }
@@ -9611,7 +9617,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function setModel(modelContainer) {
 	      var _this = this;
 
-	      modelContainer.forEach(function (model, i) {
+	      return modelContainer.forEach(function (model, i) {
 	        _this.arr[i].setModel(model);
 	      });
 	    }
@@ -9621,8 +9627,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this2 = this;
 
 	      _WrapCoffee2['default'].prototype.add.call(this, el);
-	      el.emitter.on('drawn', function () {
-	        if (overContainer.type === SENDER) {
+	      return el.emitter.on('drawn', function () {
+	        if (overContainer.type === OverContainer.SENDER) {
 	          _this2.gate.send();
 	        }
 	      });
@@ -9643,6 +9649,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(_WrapCoffee2['default']);
 
 	exports['default'] = OverContainer;
+	module.exports = exports['default'];
 
 /***/ },
 /* 36 */
@@ -9689,7 +9696,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	module.exports = {
-	  host: '194.177.21.129'
+	  host: 'localhost:80'
 	};
 
 
