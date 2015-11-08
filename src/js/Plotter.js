@@ -35,9 +35,11 @@ class Plotter {
 
     this.elements = new Wrap();
 
-    if (window.overContainer !== null && window.overContainer !== undefined) {
-      window.overContainer.add(this);
-    }
+    setTimeout(() => {
+      if (window.overContainer !== null && window.overContainer !== undefined) {
+        window.overContainer.add(this);
+      }
+    }, 0);
 
     this.draw();
   }

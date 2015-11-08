@@ -1,2 +1,2 @@
 module.exports =
-  host: '194.177.21.129'
+  host: 'localhost:80'
