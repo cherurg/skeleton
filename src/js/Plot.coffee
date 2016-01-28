@@ -1,6 +1,8 @@
 d3 = require '../libs/d3/d3.js'
 _ = require './utils.coffee'
 ee = require 'event-emitter'
+SaveSvg = require './SaveSvg.js'
+SavePng = require './SavePng.js'
 PlotPure = require './PlotPure.coffee'
 
 class Plot
@@ -239,5 +241,8 @@ class Plot
     #строки 87-95: перенести их инициализацию во внешнюю функцию и вызывать
     #не только в конструкторе, но и здесь по необходимости.
 
+  saveSvg: ()-> SaveSvg(@id)
+
+  savePng: ()-> SavePng(@id)
 
 module.exports = Plot
