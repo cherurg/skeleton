@@ -5,8 +5,6 @@ io.on('connection', function (socket) {
   console.log('connected');
   var i = 0;
   socket.on('data', function (data) {
-    console.log(i++);
-    console.log(data);
     socket.broadcast.emit('data', data);
   });
 
@@ -22,4 +20,4 @@ io.on('connection', function (socket) {
   });
 });
 
-server.listen(80);
+server.listen(8632);

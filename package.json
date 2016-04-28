@@ -6,7 +6,9 @@
   "scripts": {
     "test": "mocha --compilers js:babel/register --require ./test/test_helper.js --recursive",
     "server": "python -m SimpleHTTPServer 8000",
-    "test:watch": "npm test -- --watch"
+    "test:watch": "npm test -- --watch",
+    "build": "webpack && uglifyjs dist/js/plot.js -c -m -o dist/js/plot.min.js",
+    "dev": "webpack"
   },
   "author": {
     "name": "Alexey Karpov",

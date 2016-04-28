@@ -43,8 +43,8 @@ class PlotContainer {
     let newDivId = 'plotter' + this.plotterCounter++;
 
     d3.select('#' + this.id)
-    .append('div')
-    .attr('id', newDivId);
+      .append('div')
+      .attr('id', newDivId);
 
     return newDivId;
   }

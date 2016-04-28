@@ -7827,7 +7827,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  function Plot(elementID, plotPure, options) {
-	    var ref;
 	    if (options == null) {
 	      options = {};
 	    }
@@ -7840,7 +7839,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        throw this.constructor.name + ": Отсутствует ID элемента для рисования";
 	      }
 	      this.id = elementID[0] === "#" ? elementID : "#" + elementID;
-	      if (!((plotPure != null) && (plotPure != null ? (ref = plotPure.constructor) != null ? ref.name : void 0 : void 0) === "PlotPure")) {
+	      if (!((plotPure != null) && plotPure instanceof PlotPure)) {
 	        throw this.constructor.name + ": Неверный аргумент plot -- " + plotPure;
 	      }
 	      this.pure = plotPure;
@@ -9656,12 +9655,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    enumerable: true
 	  }]);
 
-	  function OverContainer(type) {
+	  function OverContainer(type, socket) {
 	    _classCallCheck(this, OverContainer);
 
 	    _get(Object.getPrototypeOf(OverContainer.prototype), 'constructor', this).call(this);
 	    this.type = type;
-	    this.gate = new _GateCoffee2['default'](this);
+	    this.gate = new _GateCoffee2['default'](this, socket);
 	  }
 
 	  _createClass(OverContainer, [{
@@ -9712,21 +9711,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 38 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	var Gate, config;
-
-	config = __webpack_require__(39);
+	var Gate;
 
 	Gate = (function() {
-	  function Gate(overContainer) {
+	  function Gate(overContainer, socket) {
+	    this.socket = socket;
 	    this.container = overContainer;
+	    if (this.container.type === 'receiver' && (this.socket != null)) {
+	      this.socket.on('plot-data', this.receive.bind(this));
+	    }
 	  }
 
 	  Gate.prototype.send = function() {
-	    if (this.container.type !== 'sender') {
-
+	    if (!(this.container.type === 'sender' && (this.socket != null))) {
+	      return;
 	    }
+	    return this.socket.emit('plot-data', this.container.getModel());
 	  };
 
 	  Gate.prototype.receive = function(model) {
@@ -9734,7 +9736,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  Gate.prototype.getSocket = function() {
-	    return socket;
+	    if (this.socket != null) {
+	      return this.socket;
+	    }
 	  };
 
 	  return Gate;
@@ -9742,15 +9746,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 
 	module.exports = Gate;
-
-
-/***/ },
-/* 39 */
-/***/ function(module, exports) {
-
-	module.exports = {
-	  host: 'localhost:80'
-	};
 
 
 /***/ }

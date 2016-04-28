@@ -41,7 +41,7 @@ class Plot
       #console.log "plotPure: " + plotPure
       #console.log "plotPureConstructorName: " + plotPure?.constructor?.name
       #две строчки выше -- для issue на github
-      unless plotPure? and plotPure?.constructor?.name is "PlotPure"
+      unless plotPure? and plotPure instanceof PlotPure
         throw @constructor.name + ": Неверный аргумент plot -- " + plotPure
       @pure = plotPure
 

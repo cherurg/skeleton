@@ -1,15 +1,14 @@
 import Wrap from './Wrap.coffee';
-import ee from 'event-emitter';
 import Gate from './Gate.coffee';
 
 class OverContainer extends Wrap {
   static SENDER = 'sender';
   static RECEIVER = 'receiver';
 
-  constructor(type) {
+  constructor(type, socket) {
     super();
     this.type = type;
-    this.gate = new Gate(this);
+    this.gate = new Gate(this, socket);
   }
 
   getModel() {
