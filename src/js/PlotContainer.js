@@ -1,5 +1,5 @@
 import d3 from '../libs/d3/d3';
-import {extend, clone} from 'lodash';
+import {extend, clone} from './utils.coffee';
 
 import Wrap from './Wrap.coffee';
 import Plotter from './Plotter';

@@ -1,5 +1,5 @@
 Func = require './Func.coffee'
-_ = require 'lodash'
+_ = require './utils.coffee'
 
 class ShadedArea extends Func
   defaults: do ->

@@ -1,5 +1,5 @@
 d3 = require '../libs/d3/d3.js'
-_ = require 'lodash'
+_ = require './utils.coffee'
 Colors = require('./Colors.coffee')('Color')
 Colours = require('./Colors.coffee')('Colour', 'color')
 LinePure = require('./LinePure.coffee')

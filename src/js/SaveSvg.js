@@ -1,6 +1,4 @@
-d3 = require('../libs/d3/d3.js')
-_ = require('./utils.coffee')
-
+import d3 from '../libs/d3/d3.js';
 
 let SaveSvg = (id) => {
       let xml = d3.select(id)
